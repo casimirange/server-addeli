@@ -73,7 +73,7 @@ public class User{
     
     @NotBlank
     @Size(min=9, max = 13)
-    private int tel;
+    private Long tel; 
     
     @Column(columnDefinition = "BIT default true", length = 1)
     private boolean etat;
@@ -102,7 +102,7 @@ public class User{
     public User() {
     }
 
-    public User(String name, String username, String email, String password, int tel, boolean etat) {
+    public User(String name, String username, String email, String password, Long tel, boolean etat) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -151,11 +151,11 @@ public class User{
         this.password = password;
     }
 
-    public int getTel() {
+    public Long getTel() {
         return tel;
     }
 
-    public void setTel(int tel) {
+    public void setTel(Long tel) {
         this.tel = tel;
     }
 

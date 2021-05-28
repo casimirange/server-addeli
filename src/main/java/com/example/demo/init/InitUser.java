@@ -40,21 +40,22 @@ public class InitUser implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {;
         System.out.println("initialisation de l'user");        
-        String username = "leo sev15";
-        String email = "leo15@gmail.com";
+        String username = "leopold severin";
+        String email = "leosev@gmail.com";
 
         if (utilisateurRepository.existsByUsername(username)) {
             System.out.println("Fail -> Username is already taken!");
         }else if (utilisateurRepository.existsByEmail(email)) {
           System.out.println("Fail -> Email is already in use!");
         } else{
-                       
+               
+            Long x = Long.parseLong("0032494913093");
         User user = new User();
-        user.setName("leopold15");
+        user.setName("Chihimo Severin");
         user.setEmail(email);
         user.setUsername(username);
-        user.setPassword(encoder.encode("ange3000"));
-        user.setTel(693764275);
+        user.setPassword(encoder.encode("leo2004"));
+        user.setTel(x);
         Set<Roles> roles = new HashSet<>();
       
         Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_ADHERENT)
