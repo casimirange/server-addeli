@@ -56,7 +56,7 @@ public class InitUser implements ApplicationRunner{
         user.setUsername(username);
         user.setPassword(encoder.encode("leo2004"));
         user.setTel(x);
-        user.setEtat(true);
+        user.setEtat(true); 
         Set<Roles> roles = new HashSet<>();
        
         Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_SUPER_ADMIN)
