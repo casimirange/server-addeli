@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
  
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -73,6 +74,9 @@ public class User{
     @NotBlank
     @Size(min=9, max = 13)
     private int tel;
+    
+    @Column(columnDefinition = "BIT default true", length = 1)
+    private boolean etat;
  
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", 
@@ -87,6 +91,9 @@ public class User{
     public List<Tontine> tontines;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<Planing> planings;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Prets> pret;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -95,12 +102,13 @@ public class User{
     public User() {
     }
 
-    public User(String name, String username, String email, String password, int tel) {
+    public User(String name, String username, String email, String password, int tel, boolean etat) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.tel = tel;
+        this.etat = etat;
     }
 
     public Long getId() {
@@ -157,6 +165,14 @@ public class User{
 
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
+    }
+
+    public boolean isEtat() {
+        return etat;
+    }
+
+    public void setEtat(boolean etat) {
+        this.etat = etat;
     }
     
     

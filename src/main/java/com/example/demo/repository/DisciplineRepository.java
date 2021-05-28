@@ -5,6 +5,8 @@
  */
 package com.example.demo.repository;
 
+import com.example.demo.entity.Amande;
+import com.example.demo.entity.Discipline;
 import com.example.demo.entity.Reunion;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.User;
@@ -21,19 +23,14 @@ import org.springframework.stereotype.Repository;
  * @author Casimir
  */
 @Repository
-public interface SessionRepository extends JpaRepository<Session, Long> {
-    List<Session> findByEtat(boolean etat);
-    Session findByDebut(LocalDate date);
-    Session findFirstByOrderByIdSessionDesc();
-//    Session existByEtat(boolean etat);
-    
-    String sessionActive = "SELECT * from session s WHERE s.etat = 1";
+public interface DisciplineRepository extends JpaRepository<Discipline, Long> {    
+    String discipline = "select d.id_discipline, d.date, d.type, "
+            + "u.name from discipline d "
+            + "join session s on d.id_session = s.id_session "
+            + "join user u on u.id = d.id_user "
+            + "where s.etat = 1 "
+            + "ORDER by d.date desc ";
   
-    @Query(value=sessionActive, nativeQuery = true)
-    public JSONObject getActiveSession();
-    
-    String allSession = "SELECT * from session s order by s.debut desc";
-  
-    @Query(value=allSession, nativeQuery = true)
-    public List<JSONObject> getAllSession();
+    @Query(value=discipline, nativeQuery = true)
+    public List<JSONObject> findDiscipline();
 }

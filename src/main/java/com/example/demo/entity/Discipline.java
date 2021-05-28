@@ -20,25 +20,16 @@ import javax.validation.constraints.NotBlank;
  * @author Casimir
  */
 @Entity
-public class Amande {
+public class Discipline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAmande;
- 
-    @NotBlank
-    private double debit;
- 
-    @NotBlank
-    private double credit;
- 
-    @NotBlank
-    private double solde;
+    private Long idDiscipline;
  
     @NotBlank
     private LocalDate date;
  
     @NotBlank
-    private String motif;
+    private String type;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idUser")
@@ -48,44 +39,23 @@ public class Amande {
 	@JoinColumn(name = "idSession")
     public Session session;
 
-    public Amande() {
+    public Discipline() {
     }
 
-    public Amande(double debit, double credit, double solde, LocalDate date, String motif, User user, Session session) {
-        this.debit = debit;
-        this.credit = credit;
-        this.solde = solde;
+    public Discipline(String type, LocalDate date, User user, Session session) {
+        this.type = type;
         this.date = date;
-        this.motif = motif;
         this.user = user;
         this.session = session;
     }
 
-    public Long getIdAmande() {
-        return idAmande;
+    public Long getIdDiscipline() {
+        return idDiscipline;
     }
 
-    public void setIdAmande(Long idAmande) {
-        this.idAmande = idAmande;
+    public void setIdDiscipline(Long idDiscipline) {
+        this.idDiscipline = idDiscipline;
     }
-
-    public double getDebit() {
-        return debit;
-    }
-
-    public void setDebit(double debit) {
-        this.debit = debit;
-    }
-
-    public double getCredit() {
-        return credit;
-    }
-
-    public void setCredit(double credit) {
-        this.credit = credit;
-    }
-
-    
 
     public LocalDate getDate() {
         return date;
@@ -95,12 +65,12 @@ public class Amande {
         this.date = date;
     }
 
-    public String getMotif() {
-        return motif;
+    public String getType() {
+        return type;
     }
 
-    public void setMotif(String motif) {
-        this.motif = motif;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public User getUser() {
@@ -119,14 +89,6 @@ public class Amande {
         this.session = session;
     }
 
-    public double getSolde() {
-        return solde;
-    }
-
-    public void setSolde(double solde) {
-        this.solde = solde;
-    }
-    
     
 
 }

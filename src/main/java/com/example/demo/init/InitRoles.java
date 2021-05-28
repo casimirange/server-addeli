@@ -38,7 +38,7 @@ public class InitRoles implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {;
         System.out.println("initialisation des roles");        
-        Roles roleUser = new Roles(RoleName.ROLE_MEMBRE);
+        Roles roleUser = new Roles(RoleName.ROLE_ADHERENT);
         Roles rolePresident = new Roles(RoleName.ROLE_PRESIDENT);
         Roles rolePorteParole = new Roles(RoleName.ROLE_PORTE_PAROLE);
         Roles roleSuperAdmin = new Roles(RoleName.ROLE_SUPER_ADMIN);
@@ -46,7 +46,7 @@ public class InitRoles implements ApplicationRunner{
         Roles roleSenceur = new Roles(RoleName.ROLE_SENSCEUR);
         Roles roleSecretaire = new Roles(RoleName.ROLE_SECRETAIRE);
 
-        if (!roleRepository.existsByName(RoleName.ROLE_MEMBRE)) {
+        if (!roleRepository.existsByName(RoleName.ROLE_ADHERENT)) {
             roleRepository.save(roleUser);
         }
         if (!roleRepository.existsByName(RoleName.ROLE_PRESIDENT)) {

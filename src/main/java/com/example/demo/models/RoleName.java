@@ -15,6 +15,6 @@ public enum  RoleName {
     ROLE_SENSCEUR,
     ROLE_PRESIDENT,
     ROLE_PORTE_PAROLE,
-    ROLE_MEMBRE,
+    ROLE_ADHERENT,
     ROLE_SUPER_ADMIN
 }

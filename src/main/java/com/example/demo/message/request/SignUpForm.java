@@ -6,6 +6,7 @@
 package com.example.demo.message.request;
 
 import java.util.Set;
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -37,6 +38,9 @@ public class SignUpForm {
     @NotBlank
     @Size(min=9, max = 13)
     private int tel;
+    
+    @Column(columnDefinition = "BIT default true", length = 1)
+    private boolean etat;
  
     public String getName() {
         return nom;
@@ -84,5 +88,21 @@ public class SignUpForm {
 
     public void setTel(int tel) {
         this.tel = tel;
+    }
+
+    public boolean isEtat() {
+        return etat;
+    }
+
+    public void setEtat(boolean etat) {
+        this.etat = etat;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 }

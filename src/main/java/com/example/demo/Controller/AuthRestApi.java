@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,9 +99,14 @@ public class AuthRestApi {
           HttpStatus.BAD_REQUEST);
     }
  
+    if (utilisateurRepository.existsByTel(signUpRequest.getTel())) {
+      return new ResponseEntity<>(new ResponseMessage("Fail -> Tel is already in use!"),
+          HttpStatus.BAD_REQUEST);
+    }
+ 
     // Creating user's account
       User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()), signUpRequest.getTel());
+        encoder.encode(signUpRequest.getPassword()), signUpRequest.getTel(), signUpRequest.isEtat());
  
       Set<String> strRoles = signUpRequest.getRole();
     Set<Roles> roles = new HashSet<>();
@@ -131,7 +137,7 @@ public class AuthRestApi {
         roles.add(secretaire);
  
         break;
-      case "senseur":
+      case "senceur":
         Roles senseur = roleRepository.findByName(RoleName.ROLE_SENSCEUR)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(senseur);
@@ -144,13 +150,14 @@ public class AuthRestApi {
  
         break;
       default:
-        Roles user0 = roleRepository.findByName(RoleName.ROLE_MEMBRE)
+        Roles user0 = roleRepository.findByName(RoleName.ROLE_ADHERENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(user0);
       }
     });
  
     user.setRoles(roles);
+    user.setEtat(true);
     utilisateurRepository.save(user);
  
     return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
@@ -163,6 +170,7 @@ public class AuthRestApi {
       user1.setEmail(signUpRequest.getEmail());
       user1.setName(signUpRequest.getName());
       user1.setUsername(signUpRequest.getUsername());
+      user1.setTel(signUpRequest.getTel());
       
       if(!user1.getPassword().equals(signUpRequest.getPassword())){
           user1.setPassword(encoder.encode(signUpRequest.getPassword()));
@@ -197,7 +205,7 @@ public class AuthRestApi {
         roles.add(secretaire);
  
         break;
-      case "senseur":
+      case "senceur":
         Roles senseur = roleRepository.findByName(RoleName.ROLE_SENSCEUR)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(senseur);
@@ -210,7 +218,7 @@ public class AuthRestApi {
  
         break;
       default:
-        Roles user = roleRepository.findByName(RoleName.ROLE_MEMBRE)
+        Roles user = roleRepository.findByName(RoleName.ROLE_ADHERENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(user);
       }
@@ -223,13 +231,35 @@ public class AuthRestApi {
   }
   
   @GetMapping
-  public List<User> getUsers(){      
-      return utilisateurRepository.findAll();
+  public List<JSONObject> getUsers(){      
+      return utilisateurRepository.getUsers();
+  }
+  
+  @GetMapping("/active")
+  public List<JSONObject> getActiveUsers(){      
+      return utilisateurRepository.getActiveUsers();
+  }
+  
+  
+  @GetMapping("/count")
+  public Long countUsers(){      
+      return utilisateurRepository.Count();
   }
   
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
             utilisateurRepository.delete(utilisateurRepository.findById(id).get());
+    }
+  
+    @PutMapping("/enable/{id}")
+    public void enableDesableUser(@PathVariable Long id) {
+        User u = utilisateurRepository.findById(id).get();
+        if(u.isEtat()){
+            u.setEtat(false);
+        }else{
+            u.setEtat(true);
+        }
+            utilisateurRepository.save(u);
     }
     
     @GetMapping("/{nom}")

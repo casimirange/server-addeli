@@ -13,7 +13,9 @@ import com.example.demo.entity.User;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import net.minidev.json.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,4 +27,14 @@ public interface PretRepository extends JpaRepository<Prets, Long> {
     List<Prets> findByDatePret(LocalDate date);
     List<Prets> findByRembourse(boolean etat);
     List<Prets> findByUser(User user);
+    
+    String planing = "select p.id_pret, p.date_pret, p.date_remboursement, p.montant_prete, p.montant_rembourse,"
+            + "p.rembourse, u.name as nom from prets p "
+            + "join session s on p.id_session = s.id_session "
+            + "join user u on u.id = p.id_user "
+            + "where s.etat = 1"
+            + " ORDER by p.date_pret desc ";
+  
+    @Query(value=planing, nativeQuery = true)
+    public List<JSONObject> findPrets();
 }

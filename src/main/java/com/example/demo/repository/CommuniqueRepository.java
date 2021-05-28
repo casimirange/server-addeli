@@ -5,10 +5,8 @@
  */
 package com.example.demo.repository;
 
-import com.example.demo.entity.Reunion;
-import com.example.demo.entity.User;
+import com.example.demo.entity.Communique;
 import java.util.List;
-import java.util.Optional;
 import net.minidev.json.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,12 +17,12 @@ import org.springframework.stereotype.Repository;
  * @author Casimir
  */
 @Repository
-public interface ReunionRepository extends JpaRepository<Reunion, Long> {
-    Optional<Reunion> findByNom(String nom);
-    Boolean existsByNom(String nom);
-    
-    String reunion = "SELECT r.date_creation as date, r.fondateur FROM reunion r WHERE r.id_reunion = 1";
+public interface CommuniqueRepository extends JpaRepository<Communique, Long> {
+    String cr = "select c.id_communique, c.date, c.details from communique c "
+            + "join session s on c.id_session = s.id_session "
+            + "where s.etat = 1"
+            + " ORDER by c.date desc ";
   
-    @Query(value=reunion, nativeQuery = true)
-    public JSONObject getReunion();
+    @Query(value=cr, nativeQuery = true)
+    public List<JSONObject> findCommunique();
 }

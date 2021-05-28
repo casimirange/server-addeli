@@ -7,6 +7,7 @@ package com.example.demo.Controller;
 
 
 //import com.example.demo.entity.Role;
+import com.example.demo.entity.Notifications;
 import com.example.demo.entity.Reunion;
 import com.example.demo.entity.User;
 import com.example.demo.message.request.LoginForm;
@@ -17,8 +18,12 @@ import com.example.demo.models.JwtProvider;
 import com.example.demo.models.RoleName;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.entity.Roles;
+import com.example.demo.entity.Session;
+import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.ReunionRepository;
+import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.UserRepository;
+import java.time.LocalDate;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.UtilisateurRepository;
@@ -27,7 +32,6 @@ import com.example.demo.repository.UserRepository;
 //import com.example.demo.util.RoleEnum;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import javax.validation.Valid;
 import net.minidev.json.JSONObject;
@@ -58,33 +62,56 @@ import org.springframework.web.bind.annotation.PutMapping;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/admin/reunion")
-public class ReunionController {
+@RequestMapping("/admin/notification")
+public class NotificationController {
     
     @Autowired
-    ReunionRepository reunionRepository;
+    NotificationsRepository notificationsRepository;
 
-    @PostMapping("/new")
-    public ResponseEntity<?> createReunion(@Valid @RequestBody Reunion reunion) {     
-        reunionRepository.save(reunion);
-      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getDate_creation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateReunion(@Valid @RequestBody Reunion reunion) {
-        
-      reunionRepository.save(reunion);
-      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getDate_creation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
-    }
+//    @PostMapping("/new/{id}")
+//    public ResponseEntity<?> createSession(@RequestBody Session session, @PathVariable Long id) { 
+////        Long x = Long.parseLong("1");
+//        Reunion reunion = reunionRepository.findById(id).get();
+//        System.out.println("reunion: "+ reunion.getIdReunion());
+//        session.setReunion(reunion);
+//        System.out.println("session: "+ session.getDebut());
+//        if (session.getParticipants() > userRepository.Count()){
+//            return new ResponseEntity<>(new ResponseMessage("Attention! -> le nombre de cotisant ne peut être supérieur au nombre de membre"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+//        sessionRepository.save(session);
+//      return ResponseEntity.ok(session);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateSession(@Valid @RequestBody Session session, Long id) {        
+//       Reunion reunion = reunionRepository.findById(id).get();
+//        System.out.println("reunion: "+ reunion.getFondateur());
+//        session.setReunion(reunion);
+//        System.out.println("session: "+ session.getDebut());
+//        sessionRepository.save(session);
+//      return new ResponseEntity<>(session,HttpStatus.ACCEPTED);
+//    }
 
     @GetMapping
-    public JSONObject getReunion(){      
-        return reunionRepository.getReunion();
+    public List<JSONObject> getSession(){      
+        
+        return notificationsRepository.getAll(LocalDate.now().minusDays(30),LocalDate.now());
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteReunion(@PathVariable Long id) {
-            reunionRepository.delete(reunionRepository.findById(id).get());
-    }
+//    @GetMapping("/active")
+//    public JSONObject getActiveSession(){      
+//        return sessionRepository.getActiveSession();
+//    }
+//
+//    @GetMapping("/all")
+//    public List<JSONObject> getAllSession(){      
+//        return sessionRepository.getAllSession();
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void deleteSession(@PathVariable Long id) {
+//            sessionRepository.delete(sessionRepository.findById(id).get());
+//    }
         
 }

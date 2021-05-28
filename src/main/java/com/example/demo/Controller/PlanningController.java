@@ -11,6 +11,7 @@ import com.example.demo.entity.Planing;
 import com.example.demo.entity.Reunion;
 import com.example.demo.message.response.ResponseMessage;
 import com.example.demo.entity.Session;
+import com.example.demo.entity.User;
 import com.example.demo.repository.PlanningRepository;
 import com.example.demo.repository.ReunionRepository;
 import com.example.demo.repository.SessionRepository;
@@ -23,6 +24,7 @@ import com.example.demo.repository.UserRepository;
 //import com.example.demo.util.RoleEnum;
 import java.util.List;
 import javax.validation.Valid;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -43,7 +46,7 @@ import org.springframework.web.bind.annotation.PutMapping;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/admin/planing")
+@RequestMapping("/api/planing")
 public class PlanningController {
         
     @Autowired
@@ -51,16 +54,20 @@ public class PlanningController {
     
     @Autowired
     PlanningRepository planningRepository;
+    
+    @Autowired
+    UserRepository userRepository;
 
-    @PostMapping()
-    public ResponseEntity<?> createSession(@RequestBody Planing planing) { 
-
+    @PostMapping("/new/{id}")
+    public ResponseEntity<?> createSession(@RequestBody Planing planing, @RequestParam Long id) { 
+        User user = userRepository.findById(id).get();  
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
         
 //        planing.setDate(planing.getDate());
         planing.setSession(session);
         planing.setEtat(false);
+        planing.setUser(user);
         
         if (planing.getDate().isBefore(session.getDebut())){
             return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié avant la période de session"),
@@ -97,8 +104,10 @@ public class PlanningController {
     }
 
     @GetMapping
-    public List<Session> getSession(){      
-        return sessionRepository.findAll();
+    public List<JSONObject> getSession(){    
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Session session = sess.get(0);
+        return planningRepository.findPlaning();
     }
 
     @GetMapping("/active")

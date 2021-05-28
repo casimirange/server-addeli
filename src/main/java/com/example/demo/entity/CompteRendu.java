@@ -6,8 +6,7 @@
 package com.example.demo.entity;
 
 import java.time.LocalDate;
-import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,9 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -25,46 +21,37 @@ import javax.validation.constraints.NotBlank;
  * @author Casimir
  */
 @Entity
-@Table(name = "planing")
-public class Planing {
+public class CompteRendu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPlanning;
+    private Long idCompteRendu;
  
     @NotBlank
     private LocalDate date;
  
     @NotBlank
-    private boolean etat;
- 
-    @NotBlank
-    private String evenement;
+    @Column(columnDefinition = "TEXT")
+    private String details;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idSession")
     public Session session;
-    
-    @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
-	@JoinColumn(name = "idUser")
-    public User user;
 
-    public Planing() {
+    public CompteRendu() {
     }
 
-    public Planing(LocalDate date, boolean etat, String evenement, Session session, User u) {
+    public CompteRendu(LocalDate date, String details, Session session) {
         this.date = date;
-        this.etat = etat;
-        this.evenement = evenement;
+        this.details = details;
         this.session = session;
-        this.user = u;
     }
 
-    public Long getIdPlanning() {
-        return idPlanning;
+    public Long getIdCompteRendu() {
+        return idCompteRendu;
     }
 
-    public void setIdPlanning(Long idPlanning) {
-        this.idPlanning = idPlanning;
+    public void setIdCompteRendu(Long idCompteRendu) {
+        this.idCompteRendu = idCompteRendu;
     }
 
     public LocalDate getDate() {
@@ -75,12 +62,12 @@ public class Planing {
         this.date = date;
     }
 
-    public boolean isEtat() {
-        return etat;
+    public String getDetails() {
+        return details;
     }
 
-    public void setEtat(boolean etat) {
-        this.etat = etat;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Session getSession() {
@@ -90,21 +77,5 @@ public class Planing {
     public void setSession(Session session) {
         this.session = session;
     }
-
-    public String getEvenement() {
-        return evenement;
-    }
-
-    public void setEvenement(String evenement) {
-        this.evenement = evenement;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+    
 }

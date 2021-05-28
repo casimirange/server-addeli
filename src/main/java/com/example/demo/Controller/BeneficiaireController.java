@@ -8,6 +8,7 @@ package com.example.demo.Controller;
 
 //import com.example.demo.entity.Role;
 import com.example.demo.entity.Beneficiaire;
+import com.example.demo.entity.Notifications;
 import com.example.demo.entity.Retenue;
 import com.example.demo.entity.Reunion;
 import com.example.demo.entity.User;
@@ -22,6 +23,7 @@ import com.example.demo.entity.Roles;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.Tontine;
 import com.example.demo.repository.BeneficiaireRepository;
+import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.RetenueRepository;
 import com.example.demo.repository.ReunionRepository;
 import com.example.demo.repository.SessionRepository;
@@ -87,6 +89,9 @@ public class BeneficiaireController {
     @Autowired
     BeneficiaireRepository beneficiaireRepository;
     
+    @Autowired
+    NotificationsRepository notificationsRepository;        
+    
     JSONObject json;
     String mts;
 
@@ -111,7 +116,7 @@ public class BeneficiaireController {
 //            System.out.println("tu es mort");
 //        }
         if(beneficiaireRepository.existsBySessionAndNom(session, user.getName())){
-            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà bouffé"),
+            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà bouffé cette session"),
               HttpStatus.BAD_REQUEST);
         }
         double bouff = (montant - mangwa) * session.getParticipants();
@@ -119,16 +124,12 @@ public class BeneficiaireController {
                 
         Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
         System.out.println("last: "+ ton.getIdTontine());
-        double solde = 0;        
-        
-         
-        
-//        double credits = (bouff * 3)/4;
+        double credits = (bouff * 3)/4;
         if(!ton.equals(null) && ton.getMontant() >= bouff ){
             double credit = (bouff *3)/4;
             System.out.println("credit: "+ credit);
             tontine.setCredit(credit);
-            solde = ton.getMontant() - credit;
+            double solde = ton.getMontant() - credit;
             tontine.setMontant(solde);
             beneficiaire.setMontant(credit);
         }else{
@@ -156,7 +157,7 @@ public class BeneficiaireController {
             return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous ne pouvez pas encore bouffer car tout les membres n'ont pas encore cotisé"),
               HttpStatus.BAD_REQUEST);
         }
-        tontineRepository.save(tontine);
+        
         
         
         beneficiaire.setDate(LocalDate.now());
@@ -164,15 +165,21 @@ public class BeneficiaireController {
         beneficiaire.setSession(session);
         beneficiaire.setNom(user.getName());
         
-        
+        Notifications notifications = new Notifications(
+                user.getName()+" a bouffé la tontine",
+                LocalDate.now());
+        notificationsRepository.save(notifications);
+        tontineRepository.save(tontine);
         beneficiaireRepository.save(beneficiaire);
         
       return new ResponseEntity<>(new ResponseMessage("Tontine bouffée"), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Tontine> getTontine(){      
-        return tontineRepository.findAll();
+    public List<JSONObject> getTontine(){     
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Session session = sess.get(0);
+        return beneficiaireRepository.getAllBenefBySession(session.getIdSession());
     }
 
     @GetMapping("/solde")

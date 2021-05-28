@@ -57,7 +57,7 @@ public class InitUser implements ApplicationRunner{
         user.setTel(693764275);
         Set<Roles> roles = new HashSet<>();
       
-        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_MEMBRE)
+        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_ADHERENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(super_adminRole);
         

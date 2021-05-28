@@ -7,19 +7,13 @@ package com.example.demo.Controller;
 
 
 //import com.example.demo.entity.Role;
+import com.example.demo.entity.Notifications;
 import com.example.demo.entity.Retenue;
-import com.example.demo.entity.Reunion;
 import com.example.demo.entity.User;
-import com.example.demo.message.request.LoginForm;
-import com.example.demo.message.request.SignUpForm;
-import com.example.demo.message.response.JwtResponse;
 import com.example.demo.message.response.ResponseMessage;
-import com.example.demo.models.JwtProvider;
-import com.example.demo.models.RoleName;
-import com.example.demo.repository.RoleRepository;
-import com.example.demo.entity.Roles;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.Tontine;
+import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.PlanningRepository;
 import com.example.demo.repository.RetenueRepository;
 import com.example.demo.repository.ReunionRepository;
@@ -35,31 +29,19 @@ import java.util.HashMap;
 //import com.example.demo.security.jwt.JwtProvider;
 
 //import com.example.demo.util.RoleEnum;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import javax.validation.Valid;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 /**
@@ -88,6 +70,9 @@ public class TontineController {
     
     @Autowired
     PlanningRepository planningRepository;
+    
+    @Autowired
+    NotificationsRepository notificationsRepository;
     
     JSONObject json;
     String mts;
@@ -162,6 +147,11 @@ public class TontineController {
         System.out.println("mangwa: "+ solde2);
         retenueRepository.save(retenue);
         
+        Notifications notifications = new Notifications(
+                user.getName()+" a cotisé",
+                LocalDate.now());
+        notificationsRepository.save(notifications);
+        
       return new ResponseEntity<>(new ResponseMessage("Tontine enregistrée"), HttpStatus.CREATED);
     }
 
@@ -222,5 +212,11 @@ public class TontineController {
         return tontineRepository.TontineSession(id);
     }
 
+    @GetMapping("/session")
+    public List<JSONObject> getActiveSessionTontine(){ 
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Session session = sess.get(0);
+        return tontineRepository.TontineSession(session.getIdSession());
+    }
         
 }

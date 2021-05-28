@@ -12,7 +12,9 @@ import com.example.demo.entity.User;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import net.minidev.json.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,5 +24,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AmandeRepository extends JpaRepository<Amande, Long> {
     List<Amande> findByDate(LocalDate date);
-    List<Amande> findByUser(User user);
+    List<Amande> findByUser(User user);    
+    Amande findFirstByOrderByIdAmandeDesc();
+    
+    String amande = "select a.id_amande, a.date, a.credit, a.debit, a.motif, a.solde, "
+            + "u.name from amande a "
+            + "join session s on a.id_session = s.id_session "
+            + "join user u on u.id = a.id_user "
+            + "where s.etat = 1 "
+            + "ORDER by a.date desc ";
+  
+    @Query(value=amande, nativeQuery = true)
+    public List<JSONObject> findAmande();
 }

@@ -5,8 +5,6 @@
  */
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -18,9 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
@@ -61,6 +57,9 @@ public class Session {
     private boolean encours;
  
     @NotBlank
+    private double taux;
+ 
+    @NotBlank
     private int participants;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
@@ -77,12 +76,26 @@ public class Session {
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     public List<Beneficiaire> beneficiaires;
     
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    public List<Prets> prets;    
+    
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    public List<Amande> amandes;
+    
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    public List<Discipline> discipline;
+    
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    public List<Elections> elections;
+    
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    public List<CompteRendu> compteRendu;
 
 
     public Session() {
     }   
 
-    public Session(int duree, int fonds, double montant, double retenue, LocalDate debut, LocalDate fin, boolean etat, boolean encours,int participants, Reunion reunion) {
+    public Session(int duree, int fonds, double montant, double retenue, LocalDate debut, LocalDate fin, boolean etat, boolean encours, double taux, int participants, Reunion reunion) {
         this.duree = duree;
         this.fonds = fonds;
         this.montant = montant;
@@ -91,6 +104,7 @@ public class Session {
         this.fin = fin;
         this.etat = etat;
         this.encours = encours;
+        this.taux = taux;
         this.participants = participants;
         this.reunion = reunion;
     }
@@ -205,5 +219,13 @@ public class Session {
 
     public void setParticipants(int participants) {
         this.participants = participants;
+    }
+
+    public double getTaux() {
+        return taux;
+    }
+
+    public void setTaux(double taux) {
+        this.taux = taux;
     }
 }
