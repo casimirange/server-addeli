@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName(String name);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    Boolean existsByTel(int tel);
+    Boolean existsByTel(Long tel);
 //    Long count(User u);
     
     String count = "select count(u.id) from user u where u.etat = 1 ";

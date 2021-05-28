@@ -38,7 +38,7 @@ public class Elections {
     private int montant;
     
     @NotBlank
-    private int tel;
+    private Long tel;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idSession")
@@ -47,7 +47,7 @@ public class Elections {
     public Elections() {
     }
 
-    public Elections(String user, String fonction, int montant, int tel, Session session) {
+    public Elections(String user, String fonction, int montant, Long tel, Session session) {
         this.user = user;
         this.fonction = fonction;
         this.montant = montant;
@@ -99,11 +99,11 @@ public class Elections {
         this.montant = montant;
     }
 
-    public int getTel() {
+    public Long getTel() {
         return tel;
     }
 
-    public void setTel(int tel) {
+    public void setTel(Long tel) {
         this.tel = tel;
     }
 
