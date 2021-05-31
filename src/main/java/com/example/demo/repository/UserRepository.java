@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName(String name);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    Boolean existsByTel(Long tel);
+//    Boolean existsByTel(Long tel);
 //    Long count(User u);
     
     String count = "select count(u.id) from user u where u.etat = 1 ";
@@ -31,7 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value=count, nativeQuery = true)
     public Long Count();
     
-    String all = "SELECT u.username, u.name, u.password, u.email, u.tel, u.etat, u.id, r.name as role"
+    String all = "SELECT u.username, u.name, u.password, u.email, u.etat, u.id, r.name as role"
             + " FROM user_roles ur "
             + "join user u on ur.user_id = u.id "
             + "join roles r on ur.role_id = r.id "
@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value=all, nativeQuery = true)
     public List<JSONObject> getUsers();
     
-    String activeuser = "SELECT u.username, u.name, u.email, u.tel, u.etat, u.id, r.name as role"
+    String activeuser = "SELECT u.username, u.name, u.email, u.etat, u.id, r.name as role"
             + " FROM user_roles ur "
             + "join user u on ur.user_id = u.id "
             + "join roles r on ur.role_id = r.id "

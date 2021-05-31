@@ -99,10 +99,10 @@ public class AuthRestApi {
           HttpStatus.BAD_REQUEST);
     }
  
-    if (utilisateurRepository.existsByTel(signUpRequest.getTel())) {
-      return new ResponseEntity<>(new ResponseMessage("Fail -> Tel is already in use!"),
-          HttpStatus.BAD_REQUEST);
-    }
+//    if (utilisateurRepository.existsByTel(signUpRequest.getTel())) {
+//      return new ResponseEntity<>(new ResponseMessage("Fail -> Tel is already in use!"),
+//          HttpStatus.BAD_REQUEST);
+//    }
  
     // Creating user's account
       User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
