@@ -35,7 +35,7 @@ public class Reunion {
     private String nom;
  
     @NotBlank
-    private LocalDate date_creation;
+    private LocalDate creation;
  
     @NotBlank
     private String fondateur;
@@ -53,16 +53,16 @@ public class Reunion {
     public Reunion() {
     }
 
-    public Reunion(String nom, LocalDate date_creation, String fondateur, String pays) {
+    public Reunion(String nom, LocalDate creation, String fondateur, String pays) {
         this.nom = nom;
-        this.date_creation = date_creation;
+        this.creation = creation;
         this.fondateur = fondateur;
         this.pays = pays;
     }
 
-    public Reunion(String nom, LocalDate date_creation, String fondateur, String pays, int tel) {
+    public Reunion(String nom, LocalDate creation, String fondateur, String pays, int tel) {
         this.nom = nom;
-        this.date_creation = date_creation;
+        this.creation = creation;
         this.fondateur = fondateur;
         this.pays = pays;
         this.tel = tel;
@@ -85,7 +85,7 @@ public class Reunion {
     }
 
     public LocalDate getDate_creation() {
-        return date_creation;
+        return creation;
     }
 
     public int getTel() {
@@ -96,8 +96,8 @@ public class Reunion {
         this.tel = tel;
     }
 
-    public void setDate_creation(LocalDate date_creation) {
-        this.date_creation = date_creation;
+    public void setDate_creation(LocalDate creation) {
+        this.creation = creation;
     }
 
     public String getFondateur() {
