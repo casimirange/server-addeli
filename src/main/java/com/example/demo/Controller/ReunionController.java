@@ -67,14 +67,14 @@ public class ReunionController {
     @PostMapping("/new")
     public ResponseEntity<?> createReunion(@Valid @RequestBody Reunion reunion) {     
         reunionRepository.save(reunion);
-      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getDate_creation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
+      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getCreation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateReunion(@Valid @RequestBody Reunion reunion) {
         
       reunionRepository.save(reunion);
-      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getDate_creation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
+      return ResponseEntity.ok(new Reunion(reunion.getNom(), reunion.getCreation(), reunion.getFondateur(), reunion.getPays(), reunion.getTel()));
     }
 
     @GetMapping
