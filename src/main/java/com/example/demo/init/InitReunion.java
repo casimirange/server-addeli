@@ -13,6 +13,7 @@ import com.example.demo.entity.Roles;
 import com.example.demo.repository.ReunionRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,18 +39,19 @@ public class InitReunion implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {;
         System.out.println("initialisation de la réunion");        
-        String nom = "ADELI";
+        String nom = "ADELI - Les Batisseurs Solidaires";
+        Long tel = Long.parseLong("32494913093");
 
         if (reunionRepository.existsByNom(nom)) {
-            System.out.println("Fail -> Name is already taken!");
+            System.out.println("Fail -> La réunion existe déjà!");
           } else{
                        
             Reunion reunion = new Reunion();
         reunion.setNom(nom);
         reunion.setFondateur("Sévérin CHIHIMO");
         reunion.setPays("Belgique");
-        reunion.setTel(494913093);
-        reunion.setDate_creation(LocalDate.now());
+        reunion.setTel(tel);
+        reunion.setDate_creation(LocalDate.of(2018, Month.MARCH, 10));
             reunionRepository.save(reunion);
             System.out.println("Réunion Créée");
         }

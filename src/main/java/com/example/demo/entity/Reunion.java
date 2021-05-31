@@ -45,7 +45,7 @@ public class Reunion {
     
     @NotBlank
     @Size(min=9, max = 13)
-    private int tel;
+    private Long tel;
     
     @OneToMany(mappedBy = "reunion", cascade = CascadeType.ALL)
     public List<Session> session;
@@ -60,7 +60,7 @@ public class Reunion {
         this.pays = pays;
     }
 
-    public Reunion(String nom, LocalDate creation, String fondateur, String pays, int tel) {
+    public Reunion(String nom, LocalDate creation, String fondateur, String pays, Long tel) {
         this.nom = nom;
         this.creation = creation;
         this.fondateur = fondateur;
@@ -88,11 +88,11 @@ public class Reunion {
         return creation;
     }
 
-    public int getTel() {
+    public Long getTel() {
         return tel;
     }
 
-    public void setTel(int tel) {
+    public void setTel(Long tel) {
         this.tel = tel;
     }
 
