@@ -40,10 +40,10 @@ import org.hibernate.annotations.NaturalId;
         }),
         @UniqueConstraint(columnNames = {
             "email"
-        }),
-        @UniqueConstraint(columnNames = {
-            "tel"
         })
+//        @UniqueConstraint(columnNames = {
+//            "tel"
+//        })
 })
 //@Data //pour les getter & setter
 //@NoArgsConstructor //constructeur sans paramètres
