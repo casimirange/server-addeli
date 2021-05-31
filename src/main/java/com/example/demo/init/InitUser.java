@@ -55,7 +55,7 @@ public class InitUser implements ApplicationRunner{
         user.setEmail(email);
         user.setUsername(username);
         user.setPassword(encoder.encode("azerty"));
-        user.setTel(x);
+//        user.setTel(x);
         user.setEtat(true); 
         Set<Roles> roles = new HashSet<>();
        

@@ -51,7 +51,6 @@ public class InitReunion implements ApplicationRunner{
         reunion.setNom(nom);
         reunion.setFondateur("Sévérin CHIHIMO");
         reunion.setPays("Belgique");
-        reunion.setTel(tel);
         reunion.setCreation(date);
             reunionRepository.save(reunion);
             System.out.println("Réunion Créée");

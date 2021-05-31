@@ -71,9 +71,9 @@ public class User{
     @Size(min=6, max = 100)
     private String password;
     
-    @NotBlank
-    @Size(min=9, max = 13)
-    private Long tel; 
+//    @NotBlank
+//    @Size(min=9, max = 13)
+//    private Long tel; 
     
     @Column(columnDefinition = "BIT default true", length = 1)
     private boolean etat;
@@ -102,12 +102,12 @@ public class User{
     public User() {
     }
 
-    public User(String name, String username, String email, String password, Long tel, boolean etat) {
+    public User(String name, String username, String email, String password, boolean etat) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.tel = tel;
+//        this.tel = tel;
         this.etat = etat;
     }
 
@@ -151,13 +151,13 @@ public class User{
         this.password = password;
     }
 
-    public Long getTel() {
-        return tel;
-    }
-
-    public void setTel(Long tel) {
-        this.tel = tel;
-    }
+//    public Long getTel() {
+//        return tel;
+//    }
+//
+//    public void setTel(Long tel) {
+//        this.tel = tel;
+//    }
 
     public Set<Roles> getRoles() {
         return roles;

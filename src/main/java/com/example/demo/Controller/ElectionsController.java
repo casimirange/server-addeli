@@ -78,7 +78,7 @@ public class ElectionsController {
         User u = userRepository.findById(c).get();
         elections.setSession(session);
         elections.setUser(u.getName());
-        elections.setTel(u.getTel());
+//        elections.setTel(u.getTel());
         
         if (electionRepository.existsByUserAndSession(u.getName(), session)) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> User is already exist in this session!"),
