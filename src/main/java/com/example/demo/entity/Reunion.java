@@ -35,7 +35,7 @@ public class Reunion {
     @NotBlank
     private String nom;
  
-    @NotBlank
+    
     private LocalDate creation;
  
     @NotBlank
