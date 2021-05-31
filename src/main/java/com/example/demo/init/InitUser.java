@@ -40,8 +40,8 @@ public class InitUser implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {;
         System.out.println("initialisation de l'user");        
-        String username = "leopold severin";
-        String email = "leosev@gmail.com";
+        String username = "john snow";
+        String email = "johnsnow@gmail.com";
 
         if (utilisateurRepository.existsByUsername(username)) {
             System.out.println("Fail -> Username is already taken!");
@@ -49,22 +49,22 @@ public class InitUser implements ApplicationRunner{
           System.out.println("Fail -> Email is already in use!");
         } else{
                
-        Long x = Long.parseLong("32494913093");
+        Long x = Long.parseLong("32494043093");
         User user = new User();
-        user.setName("Chihimo Severin");
+        user.setName("John Snow");
         user.setEmail(email);
         user.setUsername(username);
-        user.setPassword(encoder.encode("leo2004"));
+        user.setPassword(encoder.encode("azerty"));
         user.setTel(x);
         user.setEtat(true); 
         Set<Roles> roles = new HashSet<>();
        
-        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_SUPER_ADMIN)
+        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_ADHERENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(super_adminRole);
         
         user.setRoles(roles);
-                    System.out.println("userssss \n"+user);
+                    System.out.println("c'est créé \n"+user);
             utilisateurRepository.save(user);
             System.out.println("Utilisateur enregistré");
         }

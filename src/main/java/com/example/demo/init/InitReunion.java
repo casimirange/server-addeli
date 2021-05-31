@@ -38,9 +38,10 @@ public class InitReunion implements ApplicationRunner{
         
     @Override
     public void run(ApplicationArguments args) throws Exception {;
-        System.out.println("initialisation de la réunion");        
+        System.out.println("initialisation de la Réunion");        
         String nom = "ADELI - Les Batisseurs Solidaires";
         Long tel = Long.parseLong("32494913093");
+        LocalDate date = LocalDate.now();
 
         if (reunionRepository.existsByNom(nom)) {
             System.out.println("Fail -> La réunion existe déjà!");
@@ -51,7 +52,7 @@ public class InitReunion implements ApplicationRunner{
         reunion.setFondateur("Sévérin CHIHIMO");
         reunion.setPays("Belgique");
         reunion.setTel(tel);
-        reunion.setDate_creation(LocalDate.now());
+        reunion.setCreation(date);
             reunionRepository.save(reunion);
             System.out.println("Réunion Créée");
         }

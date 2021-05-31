@@ -84,20 +84,12 @@ public class Reunion {
         this.nom = nom;
     }
 
-    public LocalDate getDate_creation() {
-        return creation;
-    }
-
     public Long getTel() {
         return tel;
     }
 
     public void setTel(Long tel) {
         this.tel = tel;
-    }
-
-    public void setDate_creation(LocalDate creation) {
-        this.creation = creation;
     }
 
     public String getFondateur() {
@@ -114,6 +106,14 @@ public class Reunion {
 
     public void setPays(String pays) {
         this.pays = pays;
+    }
+
+    public LocalDate getCreation() {
+        return creation;
+    }
+
+    public void setCreation(LocalDate creation) {
+        this.creation = creation;
     }
     
     
