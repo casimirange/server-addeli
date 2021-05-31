@@ -53,7 +53,7 @@ import org.springframework.web.bind.annotation.PutMapping;
  *
  * @author Casimir
  */
-@CrossOrigin(origins = "https://adeli-lbs.herokuapp.com", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestApi {
