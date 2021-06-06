@@ -27,4 +27,5 @@ public interface ReunionRepository extends JpaRepository<Reunion, Long> {
   
     @Query(value=reunion, nativeQuery = true)
     public JSONObject getReunion();
+    
 }

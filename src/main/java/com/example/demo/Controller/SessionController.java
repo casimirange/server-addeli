@@ -65,15 +65,17 @@ public class SessionController {
         session.setEncours(true);
         session.setDuree(12);
         Session s = sessionRepository.findFirstByOrderByIdSessionDesc();
-        if (session.getDebut().isBefore(s.getFin())){
-            return new ResponseEntity<>(new ResponseMessage("Erreur! -> La nouvelle session ne peut débuter avant la fin de la précédente"),
-              HttpStatus.BAD_REQUEST);
+        if(s != null){           
+            if (session.getDebut().isBefore(s.getFin())){
+                return new ResponseEntity<>(new ResponseMessage("Erreur! -> La nouvelle session ne peut débuter avant la fin de la précédente"),
+                  HttpStatus.BAD_REQUEST);
+            }
         }
-        
         if (session.getParticipants() > userRepository.Count()){
             return new ResponseEntity<>(new ResponseMessage("Attention! -> le nombre de cotisant ne peut être supérieur au nombre de membre"),
               HttpStatus.BAD_REQUEST);
         }
+        System.out.println("liste de session active : "+ sessionRepository.findByEtat(true).size());
         if (!sessionRepository.findByEtat(true).isEmpty()){
             return new ResponseEntity<>(new ResponseMessage("Attention! -> Une session est déjà en cours. Veuillez teminer la précédente avant"
                     + " de créér une nouvelle"),
