@@ -49,22 +49,22 @@ public class InitUser implements ApplicationRunner{
           System.out.println("Fail -> Email is already in use!");
         } else{
                
-        Long x = Long.parseLong("32494043093");
+        String x = "32494043093";
         User user = new User();
         user.setName("John Snow");
         user.setEmail(email);
         user.setUsername(username);
         user.setPassword(encoder.encode("azerty"));
-//        user.setTel(x);
+        user.setTel(x);
         user.setEtat(true); 
         Set<Roles> roles = new HashSet<>();
        
-        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_ADHERENT)
+        Roles super_adminRole = roleRepository.findByName(RoleName.ROLE_SUPER_ADMIN)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(super_adminRole);
         
         user.setRoles(roles);
-                    System.out.println("c'est créé \n"+user);
+                    System.out.println("userssss \n"+user);
             utilisateurRepository.save(user);
             System.out.println("Utilisateur enregistré");
         }

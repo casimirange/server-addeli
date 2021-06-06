@@ -37,7 +37,7 @@ public class SignUpForm {
     
     @NotBlank
     @Size(min=9, max = 13)
-    private Long tel;
+    private String tel;
     
     @Column(columnDefinition = "BIT default true", length = 1)
     private boolean etat;
@@ -82,11 +82,11 @@ public class SignUpForm {
       this.role = role;
     }
 
-    public Long getTel() {
+    public String getTel() {
         return tel;
     }
 
-    public void setTel(Long tel) {
+    public void setTel(String tel) {
         this.tel = tel;
     }
 

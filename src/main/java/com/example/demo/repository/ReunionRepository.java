@@ -23,7 +23,7 @@ public interface ReunionRepository extends JpaRepository<Reunion, Long> {
     Optional<Reunion> findByNom(String nom);
     Boolean existsByNom(String nom);
     
-    String reunion = "SELECT r.date_creation as date, r.fondateur FROM reunion r WHERE r.id_reunion = 1";
+    String reunion = "SELECT r.creation as date, r.fondateur FROM reunion r WHERE r.id_reunion = 1";
   
     @Query(value=reunion, nativeQuery = true)
     public JSONObject getReunion();

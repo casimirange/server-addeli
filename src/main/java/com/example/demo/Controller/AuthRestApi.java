@@ -99,14 +99,14 @@ public class AuthRestApi {
           HttpStatus.BAD_REQUEST);
     }
  
-//    if (utilisateurRepository.existsByTel(signUpRequest.getTel())) {
-//      return new ResponseEntity<>(new ResponseMessage("Fail -> Tel is already in use!"),
-//          HttpStatus.BAD_REQUEST);
-//    }
+    if (utilisateurRepository.existsByTel(signUpRequest.getTel())) {
+      return new ResponseEntity<>(new ResponseMessage("Fail -> Tel is already in use!"),
+          HttpStatus.BAD_REQUEST);
+    }
  
     // Creating user's account
       User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()), true);
+        encoder.encode(signUpRequest.getPassword()), signUpRequest.getTel(), true);
  
       Set<String> strRoles = signUpRequest.getRole();
     Set<Roles> roles = new HashSet<>();
@@ -170,7 +170,7 @@ public class AuthRestApi {
       user1.setEmail(signUpRequest.getEmail());
       user1.setName(signUpRequest.getName());
       user1.setUsername(signUpRequest.getUsername());
-//      user1.setTel(signUpRequest.getTel());
+      user1.setTel(signUpRequest.getTel());
       
       if(!user1.getPassword().equals(signUpRequest.getPassword())){
           user1.setPassword(encoder.encode(signUpRequest.getPassword()));
