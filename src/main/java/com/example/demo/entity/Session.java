@@ -32,34 +32,34 @@ public class Session {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSession;
  
-    @NotBlank
+//    @NotBlank
     private int duree;
  
-    @NotBlank
+//    @NotBlank
     private int fonds;
  
-    @NotBlank
+//    @NotBlank
     private double montant;
  
-    @NotBlank
+//    @NotBlank
     private double retenue;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate debut;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate fin;
  
-    @NotBlank
+//    @NotBlank
     private boolean etat;
  
-    @NotBlank
+//    @NotBlank
     private boolean encours;
  
-    
+//    @NotBlank
     private double taux;
  
-    @NotBlank
+//    @NotBlank
     private int participants;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
