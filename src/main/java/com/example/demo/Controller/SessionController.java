@@ -64,6 +64,7 @@ public class SessionController {
         session.setEtat(true);
         session.setEncours(true);
         session.setDuree(12);
+        session.setTaux(session.getTaux());
         Session s = sessionRepository.findFirstByOrderByIdSessionDesc();
         if(s != null){           
             if (session.getDebut().isBefore(s.getFin())){

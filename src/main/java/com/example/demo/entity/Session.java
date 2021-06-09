@@ -56,7 +56,7 @@ public class Session {
     @NotBlank
     private boolean encours;
  
-    @NotBlank
+    
     private double taux;
  
     @NotBlank
