@@ -26,16 +26,16 @@ public class Evenement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEvenement;
  
-    @NotBlank
+//    @NotBlank
     private int montant;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     private String nom;
  
-    @NotBlank
+//    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String description;
     

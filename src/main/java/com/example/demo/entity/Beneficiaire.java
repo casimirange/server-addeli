@@ -28,13 +28,13 @@ public class Beneficiaire {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBeneficiaire;
  
-    @NotBlank
+//    @NotBlank
     private double montant;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     private String nom;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département

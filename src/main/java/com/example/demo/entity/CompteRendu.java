@@ -26,10 +26,10 @@ public class CompteRendu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompteRendu;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String details;
     

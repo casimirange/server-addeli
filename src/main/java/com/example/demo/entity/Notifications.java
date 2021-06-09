@@ -26,10 +26,10 @@ public class Notifications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idNotification;
  
-    @NotBlank
+//    @NotBlank
     private String description;   
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
 
     public Notifications() {

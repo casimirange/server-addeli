@@ -28,18 +28,18 @@ public class Prets {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPret;
  
-    @NotBlank
+//    @NotBlank
     private double montant_prete;
     
-    @NotBlank
+//    @NotBlank
     private double montant_rembourse;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate datePret;
  
     private LocalDate dateRemboursement;
  
-    @NotBlank
+//    @NotBlank
     private boolean rembourse;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département

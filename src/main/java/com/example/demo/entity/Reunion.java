@@ -32,16 +32,16 @@ public class Reunion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReunion;
  
-    @NotBlank
+//    @NotBlank
     private String nom;
  
     
     private LocalDate creation;
  
-    @NotBlank
+//    @NotBlank
     private String fondateur;
  
-    @NotBlank
+//    @NotBlank
     private String pays;
         
     @OneToMany(mappedBy = "reunion", cascade = CascadeType.ALL)

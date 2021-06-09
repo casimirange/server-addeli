@@ -31,13 +31,13 @@ public class Planing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPlanning;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     private boolean etat;
  
-    @NotBlank
+//    @NotBlank
     private String evenement;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département

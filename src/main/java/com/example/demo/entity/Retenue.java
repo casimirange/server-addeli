@@ -25,19 +25,19 @@ public class Retenue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRetenue;
  
-    @NotBlank
+//    @NotBlank
     private double debit;
  
-    @NotBlank
+//    @NotBlank
     private double credit;
  
-    @NotBlank
+//    @NotBlank
     private double solde;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     private String motif;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département

@@ -25,10 +25,10 @@ public class Discipline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDiscipline;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     private String type;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département

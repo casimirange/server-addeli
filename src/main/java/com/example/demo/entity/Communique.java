@@ -26,10 +26,10 @@ public class Communique {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCommunique;
  
-    @NotBlank
+//    @NotBlank
     private LocalDate date;
  
-    @NotBlank
+//    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String details;
     

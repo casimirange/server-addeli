@@ -28,16 +28,16 @@ public class Elections {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idElection;
  
-    @NotBlank
+//    @NotBlank
     private String user;
     
-    @NotBlank
+//    @NotBlank
     private String fonction;
     
-    @NotBlank
+//    @NotBlank
     private int montant;
     
-    @NotBlank
+//    @NotBlank
     private Long tel;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
