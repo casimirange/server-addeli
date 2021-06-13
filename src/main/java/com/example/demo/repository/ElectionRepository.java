@@ -42,6 +42,7 @@ public interface ElectionRepository extends JpaRepository<Elections, Long> {
     
     String evolution2 = "SELECT count(distinct e.user)as nbre, s.debut as session, s.montant "
             + "FROM session s \n "
+            + "join elections e on e.id_session = s.id_session "
             + "GROUP by s.debut order by s.debut asc";
   
     @Query(value=evolution2, nativeQuery = true)

@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -74,11 +75,11 @@ public class PretsController {
     JSONObject json;
     String mts;
     
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createPret(@PathVariable Long id, @RequestBody Prets prets) { 
+    @PostMapping("")
+    public ResponseEntity<?> createPret(@RequestParam("user") User u, @RequestBody Prets prets) { 
         Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
         Tontine tontine = new Tontine();
-        User user = userRepository.findById(id).get(); 
+        User user = userRepository.findById(u.getId()).get(); 
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
         if(ton.getMontant() < prets.getMontant_prete()){
@@ -113,8 +114,8 @@ public class PretsController {
         return new ResponseEntity<>(new ResponseMessage("prêt validé!"), HttpStatus.CREATED);
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<?> remboursePret(@PathVariable Long id, @RequestBody Prets prets) { 
+    @PutMapping("")
+    public ResponseEntity<?> remboursePret(@RequestParam("pret") Long id, @RequestBody Prets prets) { 
         Prets prets2 = pretRepository.findById(id).get();
         Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
         Tontine tontine = new Tontine();

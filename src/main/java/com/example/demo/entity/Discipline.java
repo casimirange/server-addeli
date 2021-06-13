@@ -30,6 +30,7 @@ public class Discipline {
  
 //    @NotBlank
     private String type;
+    private String sanction;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idUser")
@@ -87,6 +88,14 @@ public class Discipline {
 
     public void setSession(Session session) {
         this.session = session;
+    }
+
+    public String getSanction() {
+        return sanction;
+    }
+
+    public void setSanction(String sanction) {
+        this.sanction = sanction;
     }
 
     

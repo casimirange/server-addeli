@@ -10,6 +10,7 @@ package com.example.demo.Controller;
 import com.example.demo.entity.Amande;
 import com.example.demo.entity.Discipline;
 import com.example.demo.entity.Notifications;
+import com.example.demo.entity.Retenue;
 import com.example.demo.entity.User;
 import com.example.demo.message.response.ResponseMessage;
 import com.example.demo.entity.Session;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -62,9 +64,9 @@ public class DisciplineController {
     JSONObject json;
     String mts;
     
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createAmande(@PathVariable Long id, @RequestBody Discipline discipline) { 
-        User user = userRepository.findById(id).get(); 
+    @PostMapping("")
+    public ResponseEntity<?> createAmande(@RequestBody Discipline discipline, @RequestParam("user") User u) { 
+        User user = userRepository.findById(u.getId()).get(); 
         List<Session> sess = sessionRepository.findByEtat(true);
         
         Session session = sess.get(0);
@@ -72,10 +74,12 @@ public class DisciplineController {
         discipline.setUser(user);        
         
         Notifications notifications = new Notifications();
-        if(discipline.getType().equals("retard")){
+        if(discipline.getType().equals("Retard")){
             notifications.setDescription(user.getName()+" est venu en retard le "+discipline.getDate());
-        }else{
+        }else if(discipline.getType().equals("Absence")){
             notifications.setDescription(user.getName()+" ne s'est pas pointé à la séance du "+discipline.getDate());
+        }else{
+            notifications.setDescription(user.getName()+" a troublé à la séance du "+discipline.getDate());
         }
         
         notifications.setDate(LocalDate.now());    

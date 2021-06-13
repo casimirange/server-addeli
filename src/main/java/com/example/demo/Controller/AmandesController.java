@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -66,16 +67,24 @@ public class AmandesController {
     JSONObject json;
     String mts;
     
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createAmande(@PathVariable Long id, @RequestBody Amande amande) { 
-        User user = userRepository.findById(id).get(); 
+    @PostMapping("")
+    public ResponseEntity<?> createAmande(@RequestParam("user") User u, @RequestBody Amande amande) { 
+        User user = userRepository.findById(u.getId()).get(); 
         List<Session> sess = sessionRepository.findByEtat(true);
         Amande am = amandeRepository.findFirstByOrderByIdAmandeDesc();
+        amande.setCredit(amande.getCredit());
+        amande.setDebit(amande.getDebit());
         double solde = 0;
         if(am != null){
-            solde = am.getSolde() + amande.getDebit();
-            amande.setSolde(solde);
-        }else{
+            if(amande.getCredit() != 0){
+                solde = am.getSolde() - amande.getCredit();
+                amande.setSolde(solde);
+            }else{
+                solde = am.getSolde() + amande.getDebit();
+                amande.setSolde(solde);
+            }
+            
+        }else {
             solde = amande.getDebit();
             amande.setSolde(solde);
         }
@@ -83,7 +92,6 @@ public class AmandesController {
         Session session = sess.get(0);
         amande.setDate(LocalDate.now());
         amande.setSession(session);
-        amande.setCredit(0);
         amande.setUser(user);        
         
         Notifications notifications = new Notifications();

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DisciplineRepository extends JpaRepository<Discipline, Long> {    
-    String discipline = "select d.id_discipline, d.date, d.type, "
+    String discipline = "select d.id_discipline, d.date, d.type, d.sanction, "
             + "u.name from discipline d "
             + "join session s on d.id_session = s.id_session "
             + "join user u on u.id = d.id_user "
