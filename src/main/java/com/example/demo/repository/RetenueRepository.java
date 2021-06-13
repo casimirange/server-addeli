@@ -25,8 +25,8 @@ public interface RetenueRepository extends JpaRepository<Retenue, Long> {
     
     String allMangwa = "select r.id_retenue, r.date, r.motif, r.credit, r.debit,"
             + "r.solde, u.name as nom from retenue r "
-            + "join user u on u.id = r.id_user ";
-//            + "ORDER by r.id_retenue desc ";
+            + "join user u on u.id = r.id_user "
+            + "ORDER by r.id_retenue desc ";
   
     @Query(value=allMangwa, nativeQuery = true)
     public List<JSONObject> findMangwa();

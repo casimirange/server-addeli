@@ -39,17 +39,19 @@ public class Retenue {
  
 //    @NotBlank
     private String motif;
+    private String transaction;
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idUser")
     public User user;
 
-    public Retenue(double debit, double credit, double solde, LocalDate date, String motif, User user) {
+    public Retenue(double debit, double credit, double solde, LocalDate date, String motif, String trans, User user) {
         this.debit = debit;
         this.credit = credit;
         this.solde = solde;
         this.date = date;
         this.motif = motif;
+        this.transaction = trans;
         this.user = user;
     }
 
@@ -110,6 +112,14 @@ public class Retenue {
 
     public void setSolde(double solde) {
         this.solde = solde;
+    }
+
+    public String getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(String transaction) {
+        this.transaction = transaction;
     }
 
 }

@@ -29,7 +29,7 @@ public interface PretRepository extends JpaRepository<Prets, Long> {
     List<Prets> findByUser(User user);
     
     String planing = "select p.id_pret, p.date_pret, p.date_remboursement, p.montant_prete, p.montant_rembourse,"
-            + "p.rembourse, u.name as nom from prets p "
+            + "p.rembourse, s.taux, u.name as nom from prets p "
             + "join session s on p.id_session = s.id_session "
             + "join user u on u.id = p.id_user "
             + "where s.etat = 1"

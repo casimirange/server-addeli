@@ -51,12 +51,11 @@ public class Planing {
     public Planing() {
     }
 
-    public Planing(LocalDate date, boolean etat, String evenement, Session session, User u) {
+    public Planing(LocalDate date, boolean etat, String evenement, Session session) {
         this.date = date;
         this.etat = etat;
         this.evenement = evenement;
         this.session = session;
-        this.user = u;
     }
 
     public Long getIdPlanning() {

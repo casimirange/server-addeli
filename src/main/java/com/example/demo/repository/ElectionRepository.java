@@ -19,6 +19,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ElectionRepository extends JpaRepository<Elections, Long> {
+    
+    Elections findByUserAndSession(String user, Session sess);
+    
     String bureau = "SELECT e.id_election, e.fonction, e.montant, e.user, s.debut as session, e.tel\n" +
         "from elections e\n" +
         "join session s on s.id_session = e.id_session \n" +
@@ -37,7 +40,7 @@ public interface ElectionRepository extends JpaRepository<Elections, Long> {
     @Query(value=evolution, nativeQuery = true)
     public List<JSONObject> evolution();
     
-    String evolution2 = "SELECT s.participants as nbre, s.debut as session, s.montant "
+    String evolution2 = "SELECT count(distinct e.user)as nbre, s.debut as session, s.montant "
             + "FROM session s \n "
             + "GROUP by s.debut order by s.debut asc";
   

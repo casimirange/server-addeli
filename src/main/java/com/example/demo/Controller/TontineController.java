@@ -7,12 +7,14 @@ package com.example.demo.Controller;
 
 
 //import com.example.demo.entity.Role;
+import com.example.demo.entity.Elections;
 import com.example.demo.entity.Notifications;
 import com.example.demo.entity.Retenue;
 import com.example.demo.entity.User;
 import com.example.demo.message.response.ResponseMessage;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.Tontine;
+import com.example.demo.repository.ElectionRepository;
 import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.PlanningRepository;
 import com.example.demo.repository.RetenueRepository;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -74,39 +77,45 @@ public class TontineController {
     @Autowired
     NotificationsRepository notificationsRepository;
     
+    @Autowired
+    ElectionRepository electionRepository;
+    
     JSONObject json;
     String mts;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createTontine(@PathVariable Long id, @RequestBody Tontine tontine) { 
+    @PostMapping()
+    public ResponseEntity<?> createTontine(@RequestParam("user") Long id) { 
         User user = userRepository.findById(id).get();  
+        Tontine tontine = new Tontine();
         Retenue retenue = new Retenue();
         System.out.println("user: "+ user.getName());
+        
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
         System.out.println("session: "+ session.getIdSession());
+        Elections e = electionRepository.findByUserAndSession(user.getName(), session);
 //        Tontine tontine = new Tontine();
         
         double montant = session.getMontant();
         double mangwa = session.getRetenue();
         System.out.println("session montant: "+ montant);
         System.out.println("montant: "+ tontine.getDebit());
-        if (montant > tontine.getDebit()){
-            return new ResponseEntity<>(new ResponseMessage("Erreur! -> Le montant de la cotisation n'est pas correct"),
-              HttpStatus.BAD_REQUEST);
-        }   
+//        if (montant > tontine.getDebit()){
+//            return new ResponseEntity<>(new ResponseMessage("Erreur! -> Le montant de la cotisation n'est pas correct"),
+//              HttpStatus.BAD_REQUEST);
+//        }   
         Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
 //        System.out.println("last: "+ ton.getIdTontine());
         double solde = 0;
         if(ton != null){
-            solde = ton.getMontant() + montant - mangwa;
+            solde = ton.getMontant() + e.getMontant();
             tontine.setMontant(solde);
         }else{
-            solde = montant - mangwa;
+            solde = e.getMontant();
             tontine.setMontant(solde);
         }
 //        double solde = ton.getMontant() + tontine.getDebit() - mangwa;
-        double debit = montant - mangwa;
+        double debit = e.getMontant();
         
         tontine.setDebit(debit);
         tontine.setCredit(0);
@@ -148,7 +157,7 @@ public class TontineController {
         retenueRepository.save(retenue);
         
         Notifications notifications = new Notifications(
-                user.getName()+" a cotisé",
+                user.getName()+" a cotisé "+ e.getMontant()+" €",
                 LocalDate.now());
         notificationsRepository.save(notifications);
         

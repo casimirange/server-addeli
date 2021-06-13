@@ -25,7 +25,7 @@ public interface PlanningRepository extends JpaRepository<Planing, Long> {
     Long countBySession(Session session);
     List<JSONObject> findDistinctDateBySessionOrderByDateAsc(Session session);
     
-    String planing = "select p.date, p.evenement, u.name as membre from planing p "
+    String planing = "select p.id_planning as id, p.date, p.evenement, u.name as membre from planing p "
             + "join session s on p.id_session = s.id_session "
             + "join user u on u.id = p.id_user "
             + "where s.etat = 1"

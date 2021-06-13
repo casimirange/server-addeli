@@ -7,15 +7,18 @@ package com.example.demo.Controller;
 
 
 //import com.example.demo.entity.Role;
+import com.example.demo.entity.Notifications;
 import com.example.demo.entity.Planing;
 import com.example.demo.entity.Reunion;
 import com.example.demo.message.response.ResponseMessage;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.User;
+import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.PlanningRepository;
 import com.example.demo.repository.ReunionRepository;
 import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.UserRepository;
+import java.time.LocalDate;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.UtilisateurRepository;
@@ -57,16 +60,22 @@ public class PlanningController {
     
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    NotificationsRepository notificationsRepository;  
 
-    @PostMapping("/new/{id}")
-    public ResponseEntity<?> createSession(@RequestBody Planing planing, @RequestParam Long id) { 
-        User user = userRepository.findById(id).get();  
+    @PostMapping("/new")
+    public ResponseEntity<?> createSession(@RequestBody Planing planing, @RequestParam("user") User u) { 
+        System.err.println("id: "+u.getId());
+//        Long id = Long.parseLong(x);
+        User user = userRepository.findById(u.getId()).get();  
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
         
 //        planing.setDate(planing.getDate());
         planing.setSession(session);
         planing.setEtat(false);
+        planing.setEvenement("réunion");
         planing.setUser(user);
         
         if (planing.getDate().isBefore(session.getDebut())){
@@ -88,19 +97,63 @@ public class PlanningController {
             return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous avez déjà atteint le nombre maximal d'enregistrement"),
               HttpStatus.BAD_REQUEST);
         }
+        
+        
+        Notifications notifications = new Notifications();
+        notifications.setDescription("planning de la réunion mis à jour");
+        notifications.setDate(LocalDate.now());    
+        
+        
         planningRepository.save(planing);
+        notificationsRepository.save(notifications); 
       return new ResponseEntity<>(new ResponseMessage("mise à jour planning"),
               HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateSession(@Valid @RequestBody Session session, Long id) {        
-//       Reunion reunion = reunionRepository.findById(id).get();
-//        System.out.println("reunion: "+ reunion.getFondateur());
-//        session.setReunion(reunion);
-//        System.out.println("session: "+ session.getDebut());
-//        sessionRepository.save(session);
-      return new ResponseEntity<>(session,HttpStatus.ACCEPTED);
+    @PutMapping("")
+    public ResponseEntity<?> updateSession(@RequestBody Planing planing, @RequestParam("user") User u, @RequestParam("id") Long id) { 
+        System.err.println("id: "+u.getId());
+//        Long id = Long.parseLong(x);
+        User user = userRepository.findById(u.getId()).get();  
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Session session = sess.get(0);
+        
+//        planing.setDate(planing.getDate());
+        planing.setSession(session);
+        planing.setEtat(false);
+        planing.setEvenement("réunion");
+        planing.setUser(user);
+        
+        if (planing.getDate().isBefore(session.getDebut())){
+            return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié avant la période de session"),
+              HttpStatus.BAD_REQUEST);
+        }
+        
+        if (planing.getDate().isAfter(session.getFin())){
+            return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié après la période de session"),
+              HttpStatus.BAD_REQUEST);
+        }
+        
+        if (planningRepository.existsByDate(planing.getDate())){
+            return new ResponseEntity<>(new ResponseMessage("Erreur! -> Cette date a déjà été enregistré au cours de cette session"),
+              HttpStatus.BAD_REQUEST);
+        }
+        
+        if (planningRepository.countBySession(session) == 12){
+            return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous avez déjà atteint le nombre maximal d'enregistrement"),
+              HttpStatus.BAD_REQUEST);
+        }
+        
+        
+        Notifications notifications = new Notifications();
+        notifications.setDescription("planning de la réunion mis à jour");
+        notifications.setDate(LocalDate.now());    
+        
+        
+        planningRepository.save(planing);
+        notificationsRepository.save(notifications); 
+      return new ResponseEntity<>(new ResponseMessage("mise à jour planning"),
+              HttpStatus.OK);
     }
 
     @GetMapping
@@ -117,7 +170,7 @@ public class PlanningController {
 
     @DeleteMapping("/{id}")
     public void deleteSession(@PathVariable Long id) {
-            sessionRepository.delete(sessionRepository.findById(id).get());
+       sessionRepository.delete(sessionRepository.findById(id).get());
     }
         
 }

@@ -7,11 +7,14 @@ package com.example.demo.Controller;
 
 
 //import com.example.demo.entity.Role;
+import com.example.demo.entity.Notifications;
+import com.example.demo.entity.Planing;
 import com.example.demo.entity.Retenue;
 import com.example.demo.entity.User;
 import com.example.demo.message.response.ResponseMessage;
 import com.example.demo.entity.Session;
 import com.example.demo.entity.Tontine;
+import com.example.demo.repository.NotificationsRepository;
 import com.example.demo.repository.PlanningRepository;
 import com.example.demo.repository.RetenueRepository;
 import com.example.demo.repository.ReunionRepository;
@@ -40,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -69,6 +73,9 @@ public class RetenueController {
     @Autowired
     PlanningRepository planningRepository;
     
+    @Autowired
+    NotificationsRepository notificationsRepository;
+    
     JSONObject json;
     String mts;
 
@@ -78,6 +85,56 @@ public class RetenueController {
         return retenueRepository.findMangwa();
     }
 
+    @PostMapping("")
+    public ResponseEntity<?> createMangwa(@RequestBody Retenue ret, @RequestParam("user") User u) { 
+        System.err.println("id: "+u.getId());
+//        Long id = Long.parseLong(x);
+        User user = userRepository.findById(u.getId()).get();  
+//        List<Session> sess = sessionRepository.findByEtat(true);
+//        Session session = sess.get(0);
+        Retenue retenue = retenueRepository.findFirstByOrderByIdRetenueDesc();
+        if(ret.getTransaction().equals("Débit")){
+            double solde = retenue.getSolde() + ret.getDebit();
+            ret.setSolde(solde);
+        }else {
+            double soldes = retenue.getSolde() - ret.getCredit();
+            ret.setSolde(soldes);
+        }
+//        planing.setDate(planing.getDate());
+        ret.setUser(user);
+        
+//        if (planing.getDate().isBefore(session.getDebut())){
+//            return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié avant la période de session"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+//        
+//        if (planing.getDate().isAfter(session.getFin())){
+//            return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié après la période de session"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+//        
+//        if (planningRepository.existsByDate(planing.getDate())){
+//            return new ResponseEntity<>(new ResponseMessage("Erreur! -> Cette date a déjà été enregistré au cours de cette session"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+//        
+//        if (planningRepository.countBySession(session) == 12){
+//            return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous avez déjà atteint le nombre maximal d'enregistrement"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+        
+        double x = ret.getDebit() + ret.getCredit();
+        Notifications notifications = new Notifications();
+        notifications.setDescription(ret.getUser().getName() +" a effectué une transaction de "+ x +" € pour motif "+ret.getMotif());
+        notifications.setDate(LocalDate.now());    
+        
+        
+        retenueRepository.save(ret);
+        notificationsRepository.save(notifications); 
+      return new ResponseEntity<>(new ResponseMessage("mouvement mangwa effectué"),
+              HttpStatus.OK);
+    }
+    
     @GetMapping("/solde")
     public JSONObject soldeRetenue(){      
         Retenue retenue = retenueRepository.findFirstByOrderByIdRetenueDesc();
