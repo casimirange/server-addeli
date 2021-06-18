@@ -22,9 +22,10 @@ public interface ElectionRepository extends JpaRepository<Elections, Long> {
     
     Elections findByUserAndSession(String user, Session sess);
     
-    String bureau = "SELECT e.id_election, e.fonction, e.montant, e.user, s.debut as session, e.tel\n" +
+    String bureau = "SELECT e.id_election, e.fonction, e.montant, e.user, s.debut as session, u.id, e.tel\n" +
         "from elections e\n" +
         "join session s on s.id_session = e.id_session \n" +
+        "join user u on u.name = e.user \n" +
         "where s.etat = 1 \n"+
         "order by e.user asc";
   
@@ -32,6 +33,7 @@ public interface ElectionRepository extends JpaRepository<Elections, Long> {
     public List<JSONObject> Bureau();
     
     Boolean existsByUserAndSession(String user, Session s);
+    Boolean existsByFonctionAndSession(String user, Session s);
     
     String evolution = "SELECT count(distinct e.user)as nbre, s.debut as session "
             + "FROM elections e join session s on s.id_session = e.id_session \n "

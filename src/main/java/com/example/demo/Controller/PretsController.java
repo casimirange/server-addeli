@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -114,7 +115,7 @@ public class PretsController {
         return new ResponseEntity<>(new ResponseMessage("prêt validé!"), HttpStatus.CREATED);
     }
     
-    @PutMapping("")
+    @PutMapping("/rembouser/")
     public ResponseEntity<?> remboursePret(@RequestParam("pret") Long id, @RequestBody Prets prets) { 
         Prets prets2 = pretRepository.findById(id).get();
         Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
@@ -124,6 +125,7 @@ public class PretsController {
         if(prets2.getMontant_prete() > prets.getMontant_rembourse()){
             return new ResponseEntity<>(new ResponseMessage("le montant remboursé est insuffisant "), HttpStatus.CREATED);
         }
+        System.out.println("remb: "+ prets.getMontant_rembourse());
         prets2.setRembourse(true);
         prets2.setDateRemboursement(LocalDate.now());
         prets2.setMontant_rembourse(prets.getMontant_rembourse());
@@ -210,6 +212,11 @@ public class PretsController {
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
         return tontineRepository.TontineSession(session.getIdSession());
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deletePret(@PathVariable Long id) {
+            pretRepository.delete(pretRepository.findById(id).get());
     }
         
 }

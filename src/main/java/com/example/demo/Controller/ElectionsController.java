@@ -36,7 +36,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
 import java.util.ArrayList;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -76,20 +78,65 @@ public class ElectionsController {
         Session session = sess.get(0);
         Long c = Long.parseLong(elections.getUser());
         User u = userRepository.findById(c).get();
-        elections.setSession(session);
-        elections.setUser(u.getName());
-//        elections.setTel(u.getTel());
+        Long t = Long.parseLong(u.getTel());
+        elections.setTel(t);
         
         if (electionRepository.existsByUserAndSession(u.getName(), session)) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> User is already exist in this session!"),
                     HttpStatus.BAD_REQUEST);
-          }
+        }
+        
+        if(!elections.getFonction().equals("Adhérant")){
+            if (electionRepository.existsByFonctionAndSession(elections.getFonction(), session)) {
+            return new ResponseEntity<>(new ResponseMessage("Ce poste est déjà occupé dans la réunion"),
+                    HttpStatus.BAD_REQUEST);
+            }
+        }
+        
+        elections.setSession(session);
+        elections.setUser(u.getName());
+        
         Notifications notifications = new Notifications();
         notifications.setDescription(elections.getUser() +" est désormais "+elections.getFonction()+ " de la réunion");
         notifications.setDate(LocalDate.now());    
-        
-        notificationsRepository.save(notifications);      
         electionRepository.save(elections);
+        notificationsRepository.save(notifications);      
+        
+        return new ResponseEntity<>(new ResponseMessage("bureau mis à jours"), HttpStatus.CREATED);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateBureau(@RequestParam("id") Long id ) { 
+        Elections elections = electionRepository.findById(id).get();
+        System.out.println("membre " + elections.getUser());
+        List<Session> sess = sessionRepository.findByEtat(true);        
+        Session session = sess.get(0);
+        Long c = Long.parseLong(elections.getUser());
+        User u = userRepository.findById(c).get();
+        Long t = Long.parseLong(u.getTel());
+        elections.setTel(t);
+        
+        if (electionRepository.existsByUserAndSession(u.getName(), session)) {
+            return new ResponseEntity<>(new ResponseMessage("Fail -> User is already exist in this session!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        if(!elections.getFonction().equals("Adhérant")){
+            if (electionRepository.existsByFonctionAndSession(elections.getFonction(), session)) {
+            return new ResponseEntity<>(new ResponseMessage("Ce poste est déjà occupé dans la réunion"),
+                    HttpStatus.BAD_REQUEST);
+            }
+        }
+        
+        elections.setSession(session);
+        elections.setUser(u.getName());
+        
+        Notifications notifications = new Notifications();
+        notifications.setDescription(elections.getUser() +" est désormais "+elections.getFonction()+ " de la réunion");
+        notifications.setDate(LocalDate.now());    
+        electionRepository.save(elections);
+        notificationsRepository.save(notifications);      
+        
         return new ResponseEntity<>(new ResponseMessage("bureau mis à jours"), HttpStatus.CREATED);
     }
         
@@ -120,6 +167,10 @@ public class ElectionsController {
     public List<JSONObject> dashLastMonth(){
         List<JSONObject> test = electionRepository.evolution2();
         return test;
+    }
+    @DeleteMapping("/{id}")
+    public void deletePret(@PathVariable Long id) {
+            electionRepository.delete(electionRepository.findById(id).get());
     }
         
 }

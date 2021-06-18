@@ -256,7 +256,7 @@ public class AuthRestApi {
         User u = utilisateurRepository.findById(id).get();
         if(u.isEtat()){
             u.setEtat(false);
-        }else{
+        }else {
             u.setEtat(true);
         }
             utilisateurRepository.save(u);

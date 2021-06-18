@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -66,85 +68,85 @@ public class BeneficiaireController {
     JSONObject json;
     String mts;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createTontine(@PathVariable Long id) { 
-        Tontine tontine = new Tontine();
-        Beneficiaire beneficiaire = new Beneficiaire();
-        User user = userRepository.findById(id).get();
-        System.out.println("user: "+ user.getName());
-        List<Session> sess = sessionRepository.findByEtat(true);
-        Session session = sess.get(0);
-        System.out.println("session: "+ session.getIdSession());
-        
-        double montant = session.getMontant();
-        double mangwa = session.getRetenue();
-        System.out.println("session montant: "+ montant);
-        System.out.println("montant: "+ tontine.getDebit());
-        Beneficiaire b = beneficiaireRepository.findFirstByOrderByIdBeneficiaireDesc();
-//        if(b.getNom().equals("")){
-//        System.out.println("last benef: "+ b.getNom());
-//        }else {
-//            System.out.println("tu es mort");
-//        }
-        if(beneficiaireRepository.existsBySessionAndNom(session, user.getName())){
-            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà bouffé cette session"),
-              HttpStatus.BAD_REQUEST);
-        }
-        double bouff = (montant - mangwa) * session.getParticipants();
-        System.out.println("nombre d'utilisateur: "+bouff);
-                
-        Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
-        System.out.println("last: "+ ton.getIdTontine());
-        double credits = (bouff * 3)/4;
-        if(!ton.equals(null) && ton.getMontant() >= bouff ){
-            double credit = (bouff *3)/4;
-            System.out.println("credit: "+ credit);
-            tontine.setCredit(credit);
-            double solde = ton.getMontant() - credit;
-            tontine.setMontant(solde);
-            beneficiaire.setMontant(credit);
-        }else{
-            return new ResponseEntity<>(new ResponseMessage("Erreur! -> montant isuffisant pour bouffer"), 
-                    HttpStatus.BAD_REQUEST);
-        }
-        
-        tontine.setDebit(0);
-        
-        tontine.setMotif(user.getName()+": a bouffé");
-        tontine.setUser(user);
-        tontine.setDate(LocalDate.now()); 
-        tontine.setSession(session);
-//        session.setReunion(reunion);
-        System.out.println("session: "+ session.getDebut());
-        System.out.println("count date: "+ tontineRepository.countByDate(LocalDate.now()));
-        System.out.println("part: "+ session.getParticipants());
-//        if(tontineRepository.existsByDateAndUser(tontine.getDate(), tontine.getUser())){
-//            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà cotisé"),
+//    @PostMapping("/{id}")
+//    public ResponseEntity<?> createTontine(@RequestParam("id") Long id, @RequestBody Beneficiaire beneficiaire) { 
+//        Tontine tontine = new Tontine();
+////        Beneficiaire beneficiaire = new Beneficiaire();
+//        User user = userRepository.findById(id).get();
+//        System.out.println("user: "+ user.getName());
+//        List<Session> sess = sessionRepository.findByEtat(true);
+//        Session session = sess.get(0);
+//        System.out.println("session: "+ session.getIdSession());
+//        
+//        double montant = session.getMontant();
+//        double mangwa = session.getRetenue();
+//        System.out.println("session montant: "+ montant);
+//        System.out.println("montant: "+ tontine.getDebit());
+//        Beneficiaire b = beneficiaireRepository.findFirstByOrderByIdBeneficiaireDesc();
+////        if(b.getNom().equals("")){
+////        System.out.println("last benef: "+ b.getNom());
+////        }else {
+////            System.out.println("tu es mort");
+////        }
+//        if(beneficiaireRepository.existsBySessionAndNom(session, user.getName())){
+//            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà bouffé cette session"),
 //              HttpStatus.BAD_REQUEST);
 //        }
-
-
-        if (!tontineRepository.countByDate(LocalDate.now()).equals(session.getParticipants())){
-            return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous ne pouvez pas encore bouffer car tout les membres n'ont pas encore cotisé"),
-              HttpStatus.BAD_REQUEST);
-        }
-        
-        
-        
-        beneficiaire.setDate(LocalDate.now());
-        
-        beneficiaire.setSession(session);
-        beneficiaire.setNom(user.getName());
-        
-        Notifications notifications = new Notifications(
-                user.getName()+" a bouffé la tontine",
-                LocalDate.now());
-        notificationsRepository.save(notifications);
-        tontineRepository.save(tontine);
-        beneficiaireRepository.save(beneficiaire);
-        
-      return new ResponseEntity<>(new ResponseMessage("Tontine bouffée"), HttpStatus.CREATED);
-    }
+//        double bouff = (montant) * session.getParticipants();
+//        System.out.println("nombre d'utilisateur: "+bouff);
+//                
+//        Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
+//        System.out.println("last: "+ ton.getIdTontine());
+//        double credits = (bouff * 3)/4;
+//        if(!ton.equals(null) && ton.getMontant() >= bouff ){
+//            double credit = (bouff *3)/4;
+//            System.out.println("credit: "+ credit);
+//            tontine.setCredit(credit);
+//            double solde = ton.getMontant() - credit;
+//            tontine.setMontant(solde);
+//            beneficiaire.setMontant(credit);
+//        }else{
+//            return new ResponseEntity<>(new ResponseMessage("Erreur! -> montant isuffisant pour bouffer"), 
+//                    HttpStatus.BAD_REQUEST);
+//        }
+//        
+//        tontine.setDebit(0);
+//        
+//        tontine.setMotif(user.getName()+": a bouffé");
+//        tontine.setUser(user);
+//        tontine.setDate(LocalDate.now()); 
+//        tontine.setSession(session);
+////        session.setReunion(reunion);
+//        System.out.println("session: "+ session.getDebut());
+//        System.out.println("count date: "+ tontineRepository.countByDate(LocalDate.now()));
+//        System.out.println("part: "+ session.getParticipants());
+////        if(tontineRepository.existsByDateAndUser(tontine.getDate(), tontine.getUser())){
+////            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà cotisé"),
+////              HttpStatus.BAD_REQUEST);
+////        }
+//
+//
+////        if (!tontineRepository.countByDate(LocalDate.now()).equals(session.getParticipants())){
+////            return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous ne pouvez pas encore bouffer car tout les membres n'ont pas encore cotisé"),
+////              HttpStatus.BAD_REQUEST);
+////        }
+//        
+//        
+//        
+//        beneficiaire.setDate(LocalDate.now());
+//        
+//        beneficiaire.setSession(session);
+//        beneficiaire.setNom(user.getName());
+//        
+//        Notifications notifications = new Notifications(
+//                user.getName()+" a bouffé la tontine",
+//                LocalDate.now());
+//        
+//        beneficiaireRepository.save(beneficiaire);
+//        tontineRepository.save(tontine);
+//        notificationsRepository.save(notifications);
+//      return new ResponseEntity<>(new ResponseMessage("Tontine bouffée"), HttpStatus.CREATED);
+//    }
 
     @GetMapping
     public List<JSONObject> getTontine(){     
@@ -195,5 +197,73 @@ public class BeneficiaireController {
         return tontineRepository.TontineSession(id);
     }
 
+    
+    @PostMapping("/news/")
+    public ResponseEntity<?> newBenef(@RequestParam("id") Long id, @RequestBody Beneficiaire beneficiaire) { 
+        Tontine tontine = new Tontine();
+//        Beneficiaire beneficiaire = new Beneficiaire();
+        User user = userRepository.findById(id).get();
+        System.out.println("user: "+ user.getName());
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Session session = sess.get(0);
+        System.out.println("session: "+ session.getIdSession());
+                
+        Beneficiaire b = beneficiaireRepository.findFirstByOrderByIdBeneficiaireDesc();
+        if(beneficiaireRepository.existsBySessionAndNom(session, user.getName())){
+            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà bouffé cette session"),
+              HttpStatus.BAD_REQUEST);
+        }
+                        
+        Tontine ton = tontineRepository.findFirstByOrderByIdTontineDesc();
+        System.out.println("last: "+ ton.getMotif());
+        if(!ton.equals(null) && ton.getMontant() >= beneficiaire.getMontant() ){
+            double credit = beneficiaire.getMontant();
+            System.out.println("credit: "+ credit);
+            tontine.setCredit(credit);
+            double solde = ton.getMontant() - credit;
+            tontine.setMontant(solde);
+            beneficiaire.setMontant(credit);
+        }else{
+            return new ResponseEntity<>(new ResponseMessage("Erreur! -> montant isuffisant pour bouffer"), 
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        tontine.setDebit(0);
+        
+        tontine.setMotif(user.getName()+": a bouffé");
+        tontine.setUser(user);
+        tontine.setDate(LocalDate.now()); 
+        tontine.setSession(session);
+//        session.setReunion(reunion);
+        System.out.println("session: "+ session.getDebut());
+        System.out.println("count date: "+ tontineRepository.countByDate(LocalDate.now()));
+        System.out.println("part: "+ session.getParticipants());
+//        if(tontineRepository.existsByDateAndUser(tontine.getDate(), tontine.getUser())){
+//            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà cotisé"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+
+
+//        if (!tontineRepository.countByDate(LocalDate.now()).equals(session.getParticipants())){
+//            return new ResponseEntity<>(new ResponseMessage("Attention! -> Vous ne pouvez pas encore bouffer car tout les membres n'ont pas encore cotisé"),
+//              HttpStatus.BAD_REQUEST);
+//        }
+        
+        
+        
+        beneficiaire.setDate(LocalDate.now());
+        
+        beneficiaire.setSession(session);
+        beneficiaire.setNom(user.getName());
+        
+        Notifications notifications = new Notifications(
+                user.getName()+" a bouffé la tontine",
+                LocalDate.now());
+        
+        beneficiaireRepository.save(beneficiaire);
+        tontineRepository.save(tontine);
+        notificationsRepository.save(notifications);
+      return new ResponseEntity<>(new ResponseMessage("Tontine bouffée"), HttpStatus.CREATED);
+    }
         
 }
