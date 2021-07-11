@@ -20,6 +20,7 @@ import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.TontineRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -151,8 +152,15 @@ public class BeneficiaireController {
     @GetMapping
     public List<JSONObject> getTontine(){     
         List<Session> sess = sessionRepository.findByEtat(true);
-        Session session = sess.get(0);
-        return beneficiaireRepository.getAllBenefBySession(session.getIdSession());
+        List<JSONObject> p ;
+        Session session = new Session();
+        if(!sess.isEmpty()){
+            session = sess.get(0); 
+            p = beneficiaireRepository.getAllBenefBySession(session.getIdSession());
+        }else{
+            p = new ArrayList<>();
+        }
+        return p ;
     }
     
     @GetMapping("/lastMonth")
@@ -205,6 +213,14 @@ public class BeneficiaireController {
         User user = userRepository.findById(id).get();
         System.out.println("user: "+ user.getName());
         List<Session> sess = sessionRepository.findByEtat(true);
+        
+        if(sess.isEmpty()){
+            return new ResponseEntity<>(new ResponseMessage("Attention! -> aucune session n'est en cours personne ne peut bouffer pour le moment"),
+              HttpStatus.BAD_REQUEST);
+        }else{
+            
+        
+        
         Session session = sess.get(0);
         System.out.println("session: "+ session.getIdSession());
                 
@@ -235,9 +251,9 @@ public class BeneficiaireController {
         tontine.setDate(LocalDate.now()); 
         tontine.setSession(session);
 //        session.setReunion(reunion);
-        System.out.println("session: "+ session.getDebut());
-        System.out.println("count date: "+ tontineRepository.countByDate(LocalDate.now()));
-        System.out.println("part: "+ session.getParticipants());
+//        System.out.println("session: "+ session.getDebut());
+//        System.out.println("count date: "+ tontineRepository.countByDate(LocalDate.now()));
+//        System.out.println("part: "+ session.getParticipants());
 //        if(tontineRepository.existsByDateAndUser(tontine.getDate(), tontine.getUser())){
 //            return new ResponseEntity<>(new ResponseMessage("Attention! -> l'utilisateur "+user.getName()+" a déjà cotisé"),
 //              HttpStatus.BAD_REQUEST);
@@ -264,6 +280,7 @@ public class BeneficiaireController {
         tontineRepository.save(tontine);
         notificationsRepository.save(notifications);
       return new ResponseEntity<>(new ResponseMessage("Tontine bouffée"), HttpStatus.CREATED);
+    }
     }
         
 }

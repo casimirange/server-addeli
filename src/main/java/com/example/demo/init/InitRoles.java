@@ -45,6 +45,7 @@ public class InitRoles implements ApplicationRunner{
         Roles roleTresorier = new Roles(RoleName.ROLE_TRESORIER);
         Roles roleSenceur = new Roles(RoleName.ROLE_SENSCEUR);
         Roles roleSecretaire = new Roles(RoleName.ROLE_SECRETAIRE);
+        Roles roleCommissaire = new Roles(RoleName.ROLE_COMISSAIRE_AU_COMPTE);
 
         if (!roleRepository.existsByName(RoleName.ROLE_ADHERENT)) {
             roleRepository.save(roleUser);
@@ -71,6 +72,10 @@ public class InitRoles implements ApplicationRunner{
 
         if (!roleRepository.existsByName(RoleName.ROLE_SECRETAIRE)) {
             roleRepository.save(roleSecretaire);
+        }
+
+        if (!roleRepository.existsByName(RoleName.ROLE_COMISSAIRE_AU_COMPTE)) {
+            roleRepository.save(roleCommissaire);
         }
                
     }

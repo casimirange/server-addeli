@@ -37,4 +37,14 @@ public interface PretRepository extends JpaRepository<Prets, Long> {
   
     @Query(value=planing, nativeQuery = true)
     public List<JSONObject> findPrets();
+    
+    String pretUser = "select p.id_pret as id, p.id_pret, p.date_pret, p.date_remboursement, p.montant_prete, p.montant_rembourse,"
+            + "p.rembourse, s.taux, u.name as nom from prets p "
+            + "join session s on p.id_session = s.id_session "
+            + "join user u on u.id = p.id_user "
+            + "where u.id = ?1"
+            + " ORDER by p.date_pret desc ";
+  
+    @Query(value=pretUser, nativeQuery = true)
+    public List<JSONObject> findPretsUser(Long id);
 }

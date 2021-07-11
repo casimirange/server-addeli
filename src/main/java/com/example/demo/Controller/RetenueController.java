@@ -140,7 +140,12 @@ public class RetenueController {
         Retenue retenue = retenueRepository.findFirstByOrderByIdRetenueDesc();
         Map<String, Object> response = new HashMap<>();
         JSONObject solde;
-        response.put("solde", retenue.getSolde());
+//        response.put("solde", retenue.getSolde());
+        if(retenue != null){
+            response.put("solde", retenue.getSolde());
+        }else{
+            response.put("solde", 0);
+        }
         solde = new JSONObject(response);
         return solde;
     }

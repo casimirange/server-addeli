@@ -23,6 +23,7 @@ import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.TontineRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 //import com.example.demo.repository.RoleRepository;
@@ -174,7 +175,11 @@ public class TontineController {
         Tontine tontine = tontineRepository.findFirstByOrderByIdTontineDesc();
         Map<String, Object> response = new HashMap<>();
         JSONObject solde;
-        response.put("solde", tontine.getMontant());
+        if(tontine != null){
+            response.put("solde", tontine.getMontant());
+        }else{
+            response.put("solde", 0);
+        }        
         solde = new JSONObject(response);
         return solde;
     }
@@ -224,8 +229,24 @@ public class TontineController {
     @GetMapping("/session")
     public List<JSONObject> getActiveSessionTontine(){ 
         List<Session> sess = sessionRepository.findByEtat(true);
-        Session session = sess.get(0);
-        return tontineRepository.TontineSession(session.getIdSession());
+        List<JSONObject> p ;
+        Session session = new Session();
+        if(!sess.isEmpty()){
+            session = sess.get(0); 
+            p = tontineRepository.TontineSession(session.getIdSession());
+        }else{
+            p = new ArrayList<>();
+        }
+        return p ;
+    }
+    
+    
+           
+    @GetMapping("/id/{id}")
+    public List<JSONObject> getUsers(@PathVariable Long id) {
+        User u = userRepository.findById(id).get();
+        
+        return tontineRepository.TontineUser(id);
     }
         
 }

@@ -19,6 +19,7 @@ import com.example.demo.repository.ReunionRepository;
 import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.UtilisateurRepository;
@@ -159,8 +160,14 @@ public class PlanningController {
     @GetMapping
     public List<JSONObject> getSession(){    
         List<Session> sess = sessionRepository.findByEtat(true);
-        Session session = sess.get(0);
-        return planningRepository.findPlaning();
+        List<JSONObject> p ;
+        if(!sess.isEmpty()){
+            p = planningRepository.findPlaning();
+        }else{
+            p = new ArrayList<>();
+        }
+        
+        return p;
     }
 
     @GetMapping("/active")

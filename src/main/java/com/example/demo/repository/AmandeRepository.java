@@ -36,4 +36,14 @@ public interface AmandeRepository extends JpaRepository<Amande, Long> {
   
     @Query(value=amande, nativeQuery = true)
     public List<JSONObject> findAmande();
+    
+    String amandeUser = "select a.id_amande, a.date, a.credit, a.debit, a.motif, a.solde, "
+            + "u.name from amande a "
+            + "join session s on a.id_session = s.id_session "
+            + "join user u on u.id = a.id_user "
+            + "where u.id = ?1 "
+            + "ORDER by a.date desc ";
+  
+    @Query(value=amandeUser, nativeQuery = true)
+    public List<JSONObject> findAmandeUser(Long id);
 }

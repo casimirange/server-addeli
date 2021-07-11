@@ -218,5 +218,12 @@ public class PretsController {
     public void deletePret(@PathVariable Long id) {
             pretRepository.delete(pretRepository.findById(id).get());
     }
+           
+    @GetMapping("/id/{id}")
+    public List<JSONObject> getUsers(@PathVariable Long id) {
+        User u = userRepository.findById(id).get();
+        
+        return pretRepository.findPretsUser(id);
+    }
         
 }

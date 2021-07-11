@@ -93,5 +93,11 @@ public class DisciplineController {
     public List<JSONObject> getActiveSessionTontine(){
         return disciplineRepository.findDiscipline();
     }
+             
+    @GetMapping("/id/{id}")
+    public List<JSONObject> getUsers(@PathVariable Long id) {
+        User u = userRepository.findById(id).get();
         
+        return disciplineRepository.findDisciplineUser(id);
+    }
 }

@@ -249,9 +249,20 @@ public class AmandesController {
         Amande amande = amandeRepository.findFirstByOrderByIdAmandeDesc();
         Map<String, Object> response = new HashMap<>();
         JSONObject solde;
-        response.put("solde", amande.getSolde());
+//        response.put("solde", amande.getSolde());
+        if(amande != null){
+            response.put("solde", amande.getSolde());
+        }else{
+            response.put("solde", 0);
+        }
         solde = new JSONObject(response);
         return solde;
     }
+             
+    @GetMapping("/id/{id}")
+    public List<JSONObject> getUsers(@PathVariable Long id) {
+        User u = userRepository.findById(id).get();
         
+        return amandeRepository.findAmandeUser(id);
+    }
 }

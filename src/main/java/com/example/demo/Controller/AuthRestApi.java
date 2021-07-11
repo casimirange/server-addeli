@@ -25,6 +25,7 @@ import com.example.demo.repository.UserRepository;
 //import com.example.demo.util.RoleEnum;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.validation.Valid;
 import net.minidev.json.JSONObject;
@@ -75,6 +76,12 @@ public class AuthRestApi {
     
     @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+      
+      Optional<User> user = utilisateurRepository.findByUsername(loginRequest.getUsername());
+      if(!user.get().isEtat()){
+          return new ResponseEntity<>(new ResponseMessage("vous avez été suspendu"),
+              HttpStatus.BAD_REQUEST);
+      }
  
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -119,6 +126,12 @@ public class AuthRestApi {
         roles.add(admin);
  
         break;
+      case "comissaire":
+        Roles comissaire = roleRepository.findByName(RoleName.ROLE_COMISSAIRE_AU_COMPTE)
+            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+        roles.add(comissaire);
+ 
+        break;  
       case "president":
         Roles president = roleRepository.findByName(RoleName.ROLE_PRESIDENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
@@ -187,6 +200,12 @@ public class AuthRestApi {
         roles.add(admin);
  
         break;
+      case "comissaire":
+        Roles comissaire = roleRepository.findByName(RoleName.ROLE_COMISSAIRE_AU_COMPTE)
+            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+        roles.add(comissaire);
+ 
+        break; 
       case "president":
         Roles president = roleRepository.findByName(RoleName.ROLE_PRESIDENT)
             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
@@ -265,6 +284,12 @@ public class AuthRestApi {
     @GetMapping("/{nom}")
     public void getUser(@PathVariable String nom) {
             utilisateurRepository.findByName(nom);
+    }
+    
+    @GetMapping("/id/{id}")
+    public JSONObject getUsers(@PathVariable Long id) {
+        
+            return utilisateurRepository.getUser(id);
     }
     
 }

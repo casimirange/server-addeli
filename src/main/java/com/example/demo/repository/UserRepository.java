@@ -35,6 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + " FROM user_roles ur "
             + "join user u on ur.user_id = u.id "
             + "join roles r on ur.role_id = r.id "
+            + "where r.name != \"ROLE_SUPER_ADMIN\" "
             + "order by u.name";
   
     @Query(value=all, nativeQuery = true)
@@ -44,8 +45,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + " FROM user_roles ur "
             + "join user u on ur.user_id = u.id "
             + "join roles r on ur.role_id = r.id "
-            + "where u.etat = 1 order by u.name";
+            + "where u.etat = 1  and r.name != \"ROLE_SUPER_ADMIN\" order by u.name";
   
     @Query(value=activeuser, nativeQuery = true)
     public List<JSONObject> getActiveUsers();
+    
+    String user = "SELECT u.username, u.name, u.email, u.tel, u.etat, u.id, r.name as role"
+            + " FROM user_roles ur "
+            + "join user u on ur.user_id = u.id "
+            + "join roles r on ur.role_id = r.id "
+            + "where u.id = ?1";
+  
+    @Query(value=user, nativeQuery = true)
+    public JSONObject getUser(Long id);
 }
