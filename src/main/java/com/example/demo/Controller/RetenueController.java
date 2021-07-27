@@ -93,13 +93,24 @@ public class RetenueController {
 //        List<Session> sess = sessionRepository.findByEtat(true);
 //        Session session = sess.get(0);
         Retenue retenue = retenueRepository.findFirstByOrderByIdRetenueDesc();
-        if(ret.getTransaction().equals("Débit")){
-            double solde = retenue.getSolde() + ret.getDebit();
-            ret.setSolde(solde);
-        }else {
-            double soldes = retenue.getSolde() - ret.getCredit();
-            ret.setSolde(soldes);
+        if(retenue  != null){
+            if(ret.getTransaction().equals("Débit")){
+                double solde = retenue.getSolde() + ret.getDebit();
+                ret.setSolde(solde);
+            }else {
+                double soldes = retenue.getSolde() - ret.getCredit();
+                ret.setSolde(soldes);
+            }
+        }else{
+            if(ret.getTransaction().equals("Débit")){
+                double solde = ret.getDebit();
+                ret.setSolde(solde);
+            }else {
+                double soldes = ret.getCredit();
+                ret.setSolde(soldes);
+            }
         }
+        
 //        planing.setDate(planing.getDate());
         ret.setUser(user);
         

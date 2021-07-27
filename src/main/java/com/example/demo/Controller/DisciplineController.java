@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -88,6 +89,37 @@ public class DisciplineController {
         disciplineRepository.save(discipline);
         return new ResponseEntity<>(new ResponseMessage("discipline mise à jour"), HttpStatus.CREATED);
     }
+    
+    @PutMapping("")
+    public ResponseEntity<?> updateDiscipline(@RequestBody Discipline disc, @RequestParam("user") User u, @RequestParam("id") Long id) { 
+        User user = userRepository.findById(u.getId()).get(); 
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Discipline discipline = disciplineRepository.findById(id).get();
+        Session session = sess.get(0);
+        discipline.setSession(session);
+        discipline.setUser(user);        
+        discipline.setSanction(disc.getSanction());        
+        discipline.setType(disc.getType());        
+        discipline.setDate(disc.getDate());    
+        
+        System.out.println("sanction: "+discipline.getSanction());
+        System.out.println("motif: "+discipline.getType());
+        
+//        Notifications notifications = new Notifications();
+//        if(discipline.getType().equals("Retard")){
+//            notifications.setDescription(user.getName()+" est venu en retard le "+discipline.getDate());
+//        }else if(discipline.getType().equals("Absence")){
+//            notifications.setDescription(user.getName()+" ne s'est pas pointé à la séance du "+discipline.getDate());
+//        }else{
+//            notifications.setDescription(user.getName()+" a troublé à la séance du "+discipline.getDate());
+//        }
+//        
+//        notifications.setDate(LocalDate.now());    
+//        
+//        notificationsRepository.save(notifications);      
+        disciplineRepository.save(discipline);
+        return new ResponseEntity<>(new ResponseMessage("discipline mise à jour"), HttpStatus.CREATED);
+    }
 
     @GetMapping()
     public List<JSONObject> getActiveSessionTontine(){
@@ -99,5 +131,10 @@ public class DisciplineController {
         User u = userRepository.findById(id).get();
         
         return disciplineRepository.findDisciplineUser(id);
+    }
+             
+    @DeleteMapping("")
+    public void deleDepartement(@RequestParam("id") Long id) {
+        disciplineRepository.deleteById(id);
     }
 }

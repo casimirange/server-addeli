@@ -105,31 +105,34 @@ public class ElectionsController {
         return new ResponseEntity<>(new ResponseMessage("bureau mis à jours"), HttpStatus.CREATED);
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateBureau(@RequestParam("id") Long id ) { 
+    @PutMapping()
+    public ResponseEntity<?> updateBureau(@RequestParam("user") User u, @RequestParam("id") Long id, @RequestBody Elections e) { 
+        User user = userRepository.findById(u.getId()).get(); 
+        List<Session> sess = sessionRepository.findByEtat(true);
         Elections elections = electionRepository.findById(id).get();
-        System.out.println("membre " + elections.getUser());
-        List<Session> sess = sessionRepository.findByEtat(true);        
         Session session = sess.get(0);
-        Long c = Long.parseLong(elections.getUser());
-        User u = userRepository.findById(c).get();
-        Long t = Long.parseLong(u.getTel());
-        elections.setTel(t);
-        
-        if (electionRepository.existsByUserAndSession(u.getName(), session)) {
-            return new ResponseEntity<>(new ResponseMessage("Fail -> User is already exist in this session!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-        
-        if(!elections.getFonction().equals("Adhérant")){
-            if (electionRepository.existsByFonctionAndSession(elections.getFonction(), session)) {
-            return new ResponseEntity<>(new ResponseMessage("Ce poste est déjà occupé dans la réunion"),
-                    HttpStatus.BAD_REQUEST);
-            }
-        }
-        
         elections.setSession(session);
-        elections.setUser(u.getName());
+        elections.setUser(user.getName());        
+        elections.setFonction(e.getFonction());        
+        elections.setMontant(e.getMontant());        
+//        elections.setDate(disc.getDate());    
+        
+        System.out.println("id: "+elections.getIdElection());
+        System.out.println("sess: "+elections.getSession());
+        
+//        Notifications notifications = new Notifications();
+//        if(discipline.getType().equals("Retard")){
+//            notifications.setDescription(user.getName()+" est venu en retard le "+discipline.getDate());
+//        }else if(discipline.getType().equals("Absence")){
+//            notifications.setDescription(user.getName()+" ne s'est pas pointé à la séance du "+discipline.getDate());
+//        }else{
+//            notifications.setDescription(user.getName()+" a troublé à la séance du "+discipline.getDate());
+//        }
+//        
+//        notifications.setDate(LocalDate.now());    
+//        
+//        notificationsRepository.save(notifications);      
+//        disciplineRepository.save(discipline);
         
         Notifications notifications = new Notifications();
         notifications.setDescription(elections.getUser() +" est désormais "+elections.getFonction()+ " de la réunion");

@@ -43,7 +43,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -127,11 +129,33 @@ public class CompteRenduController {
         notificationsRepository.save(notifications);
         tontineRepository.save(tontine);
         return new ResponseEntity<>(new ResponseMessage("prêt remboursé!"), HttpStatus.CREATED);
+    } 
+    
+    @PutMapping("")
+    public ResponseEntity<?> updateCR(@RequestBody CompteRendu communique, @RequestParam("id") Long id) {         
+        List<Session> sess = sessionRepository.findByEtat(true);
+        CompteRendu com = compteRenduRepository.findById(id).get();
+        com.setDetails(communique.getDetails());        
+        System.out.println("dat : "+com.getDate());
+        System.out.println("id : "+com.getIdCompteRendu());
+        System.out.println("details : "+com.getDetails());
+        Notifications notifications = new Notifications();
+        notifications.setDescription("modification du compte rendu du "+com.getDate());
+        notifications.setDate(LocalDate.now());
+                     
+        compteRenduRepository.save(com);
+        notificationsRepository.save(notifications);
+        return new ResponseEntity<>(new ResponseMessage("compte rendu mis à jour!"), HttpStatus.CREATED); 
     }
 
     @GetMapping("")
     public List<JSONObject> getPrets(){      
         return compteRenduRepository.findCR();
+    }
+             
+    @DeleteMapping("")
+    public void deleteCommunique(@RequestParam("id") Long id) {
+        compteRenduRepository.deleteById(id);
     }
         
 }

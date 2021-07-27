@@ -45,7 +45,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.repository.NotificationsRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -84,10 +86,32 @@ public class CommuniqueController {
         communiqueRepository.save(communique);
         return new ResponseEntity<>(new ResponseMessage("communiqué enregistré!"), HttpStatus.CREATED); 
     } 
+    
+    @PutMapping("")
+    public ResponseEntity<?> updateCR(@RequestBody Communique communique, @RequestParam("id") Long id) {         
+        List<Session> sess = sessionRepository.findByEtat(true);
+        Communique com = communiqueRepository.findById(id).get();
+        com.setDetails(communique.getDetails());        
+        System.out.println("dat : "+com.getDate());
+        System.out.println("id : "+com.getIdCommunique());
+        System.out.println("details : "+com.getDetails());
+        Notifications notifications = new Notifications();
+        notifications.setDescription("modification du communiqué du "+communique.getDate());
+        notifications.setDate(LocalDate.now());
+                     
+        communiqueRepository.save(com);
+        notificationsRepository.save(notifications);
+        return new ResponseEntity<>(new ResponseMessage("communiqué mis à jour!"), HttpStatus.CREATED); 
+    } 
 
     @GetMapping("")
     public List<JSONObject> getPrets(){      
         return communiqueRepository.findCommunique();
+    }
+             
+    @DeleteMapping("")
+    public void deleteCommunique(@RequestParam("id") Long id) {
+        communiqueRepository.deleteById(id);
     }
         
 }

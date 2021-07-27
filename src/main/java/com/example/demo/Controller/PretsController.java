@@ -122,10 +122,15 @@ public class PretsController {
         Tontine tontine = new Tontine();
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
-        if(prets2.getMontant_prete() > prets.getMontant_rembourse()){
-            return new ResponseEntity<>(new ResponseMessage("le montant remboursé est insuffisant "), HttpStatus.CREATED);
+        double pret = (prets2.getMontant_prete() * (session.getTaux()/100)) + prets2.getMontant_prete(); 
+        if(prets2.isRembourse()){
+            System.out.println("pas de prêt");
+            return new ResponseEntity<>(new ResponseMessage("ceci n'est pas un prêt !"), HttpStatus.CREATED);
         }
-        System.out.println("remb: "+ prets.getMontant_rembourse());
+        if(pret != prets.getMontant_rembourse()){
+            return new ResponseEntity<>(new ResponseMessage("le montant remboursé est érroné! "), HttpStatus.CREATED);
+        }
+        System.out.println("remb: "+ pret);
         prets2.setRembourse(true);
         prets2.setDateRemboursement(LocalDate.now());
         prets2.setMontant_rembourse(prets.getMontant_rembourse());

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DisciplineRepository extends JpaRepository<Discipline, Long> {    
     String discipline = "select d.id_discipline, d.date, d.type, d.sanction, "
-            + "u.name from discipline d "
+            + "u.name, u.id from discipline d "
             + "join session s on d.id_session = s.id_session "
             + "join user u on u.id = d.id_user "
             + "where s.etat = 1 "
@@ -35,7 +35,7 @@ public interface DisciplineRepository extends JpaRepository<Discipline, Long> {
     public List<JSONObject> findDiscipline();
     
     String disciplineUSER = "select d.id_discipline, d.date, d.type, d.sanction, "
-            + "u.name from discipline d "
+            + "u.name, u.id from discipline d "
             + "join user u on u.id = d.id_user "
             + "where u.id = ?1 "
             + "ORDER by d.date desc ";

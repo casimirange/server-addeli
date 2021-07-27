@@ -49,7 +49,7 @@ public class InitUser implements ApplicationRunner{
           System.out.println("Fail -> Email is already in use!");
         } else{
                
-        String x = "32494043091";
+        String x = "32494043000";
         User user = new User();
         user.setName("Casimir Ouandji");
         user.setEmail(email);

@@ -112,19 +112,19 @@ public class PlanningController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateSession(@RequestBody Planing planing, @RequestParam("user") User u, @RequestParam("id") Long id) { 
+    public ResponseEntity<?> updateSession(@RequestBody Planing plan, @RequestParam("user") User u, @RequestParam("id") Long id) { 
         System.err.println("id: "+u.getId());
 //        Long id = Long.parseLong(x);
         User user = userRepository.findById(u.getId()).get();  
         List<Session> sess = sessionRepository.findByEtat(true);
         Session session = sess.get(0);
-        
+        Planing planing = planningRepository.findById(id).get();
 //        planing.setDate(planing.getDate());
         planing.setSession(session);
         planing.setEtat(false);
         planing.setEvenement("réunion");
         planing.setUser(user);
-        
+        planing.setDate(plan.getDate());
         if (planing.getDate().isBefore(session.getDebut())){
             return new ResponseEntity<>(new ResponseMessage("Erreur! -> La date ne peut être définié avant la période de session"),
               HttpStatus.BAD_REQUEST);
@@ -135,7 +135,7 @@ public class PlanningController {
               HttpStatus.BAD_REQUEST);
         }
         
-        if (planningRepository.existsByDate(planing.getDate())){
+        if (planningRepository.existsByDate(planing.getDate()) && planing.getUser().equals(plan.getUser())){
             return new ResponseEntity<>(new ResponseMessage("Erreur! -> Cette date a déjà été enregistré au cours de cette session"),
               HttpStatus.BAD_REQUEST);
         }
@@ -145,20 +145,19 @@ public class PlanningController {
               HttpStatus.BAD_REQUEST);
         }
         
-        
-        Notifications notifications = new Notifications();
-        notifications.setDescription("planning de la réunion mis à jour");
-        notifications.setDate(LocalDate.now());    
+           
         
         
         planningRepository.save(planing);
+        Notifications notifications = new Notifications();
+        notifications.setDescription("planning de la réunion modifié");
+        notifications.setDate(LocalDate.now()); 
         notificationsRepository.save(notifications); 
-      return new ResponseEntity<>(new ResponseMessage("mise à jour planning"),
-              HttpStatus.OK);
+      return new ResponseEntity<>(new ResponseMessage("planning update"), HttpStatus.OK);
     }
 
     @GetMapping
-    public List<JSONObject> getSession(){    
+    public List<JSONObject> getPlaning(){    
         List<Session> sess = sessionRepository.findByEtat(true);
         List<JSONObject> p ;
         if(!sess.isEmpty()){
@@ -174,10 +173,10 @@ public class PlanningController {
     public List<Session> getActiveSession(){      
         return sessionRepository.findByEtat(true);
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteSession(@PathVariable Long id) {
-       sessionRepository.delete(sessionRepository.findById(id).get());
+       
+    @DeleteMapping("")
+    public void deleteplaning(@RequestParam("id") Long id) {
+        planningRepository.deleteById(id);
     }
         
 }

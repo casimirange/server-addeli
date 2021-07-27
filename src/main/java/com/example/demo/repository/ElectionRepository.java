@@ -22,7 +22,7 @@ public interface ElectionRepository extends JpaRepository<Elections, Long> {
     
     Elections findByUserAndSession(String user, Session sess);
     
-    String bureau = "SELECT e.id_election, e.fonction, e.montant, e.user, s.debut as session, u.id, e.tel\n" +
+    String bureau = "SELECT e.id_election, e.fonction, e.montant, e.user, s.debut as session, s.id_session as sess, u.id, e.tel\n" +
         "from elections e\n" +
         "join session s on s.id_session = e.id_session \n" +
         "join user u on u.name = e.user \n" +
