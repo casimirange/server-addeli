@@ -14,7 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+<<<<<<< HEAD
 //import jdk.nashorn.internal.objects.annotations.Constructor;
+=======
+import jdk.nashorn.internal.objects.annotations.Constructor;
+>>>>>>> f0f59a065cc01d7a7169f1c0e2138a8b2282f3d0
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

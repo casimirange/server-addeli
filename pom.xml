@@ -16,7 +16,10 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+<<<<<<< HEAD
 		<packaging>war</packaging>
+=======
+>>>>>>> f0f59a065cc01d7a7169f1c0e2138a8b2282f3d0
 	</properties>
 
 	<dependencies>

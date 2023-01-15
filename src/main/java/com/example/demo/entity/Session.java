@@ -18,7 +18,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+<<<<<<< HEAD
 //import jdk.nashorn.internal.ir.annotations.Ignore;
+=======
+import jdk.nashorn.internal.ir.annotations.Ignore;
+>>>>>>> f0f59a065cc01d7a7169f1c0e2138a8b2282f3d0
 
 /**
  *
@@ -64,6 +68,10 @@ public class Session {
     
     @ManyToOne(fetch = FetchType.EAGER) //plusieurs lignes pour un département
 	@JoinColumn(name = "idReunion")
+<<<<<<< HEAD
+=======
+    @Ignore
+>>>>>>> f0f59a065cc01d7a7169f1c0e2138a8b2282f3d0
     public Reunion reunion;
     
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
