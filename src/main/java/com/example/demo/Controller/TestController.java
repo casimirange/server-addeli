@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Casimir
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 public class TestController {
     @GetMapping("/api/test/user")

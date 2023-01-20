@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Casimir
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/admin/discipline")
 public class DisciplineController {
