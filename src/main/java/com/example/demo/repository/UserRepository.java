@@ -35,7 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + " FROM user_roles ur "
             + "join user u on ur.user_id = u.id "
             + "join roles r on ur.role_id = r.id "
-            + "where r.name != \"ROLE_SUPER_ADMIN\" "
+
             + "order by u.name";
   
     @Query(value=all, nativeQuery = true)
