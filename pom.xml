@@ -12,11 +12,11 @@
 	<artifactId>ServeurADELI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ServeurADELI</name>
-<<<<<<< HEAD
+
 <!--	<packaging>war</packaging>-->
-=======
+
 	<!--<packaging>war</packaging>-->
->>>>>>> 02916260810d513dde60e4806bb4e2affdcac1e6
+
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
