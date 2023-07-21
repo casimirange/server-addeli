@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -206,7 +207,7 @@ public class BeneficiaireController {
 
     
     @PostMapping("/news/")
-    public ResponseEntity<?> newBenef(@RequestParam("id") Long id, @RequestBody Beneficiaire beneficiaire) { 
+    public ResponseEntity<?> newBenef(@RequestParam("id") Long id, @RequestBody Beneficiaire beneficiaire, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false, value = "date" ) LocalDate date) {
         Tontine tontine = new Tontine();
 //        Beneficiaire beneficiaire = new Beneficiaire();
         User user = userRepository.findById(id).get();
@@ -239,7 +240,7 @@ public class BeneficiaireController {
             tontine.setMontant(solde);
             beneficiaire.setMontant(credit);
         }else{
-            return new ResponseEntity<>(new ResponseMessage("Erreur! -> montant isuffisant pour bouffer"), 
+            return new ResponseEntity<>(new ResponseMessage("Erreur! -> montant insuffisant pour bouffer"),
                     HttpStatus.BAD_REQUEST);
         }
         
@@ -247,7 +248,7 @@ public class BeneficiaireController {
         
         tontine.setMotif(user.getName()+": a bouffé");
         tontine.setUser(user);
-        tontine.setDate(LocalDate.now()); 
+        tontine.setDate(date);
         tontine.setSession(session);
 //        session.setReunion(reunion);
 //        System.out.println("session: "+ session.getDebut());
@@ -266,7 +267,7 @@ public class BeneficiaireController {
         
         
         
-        beneficiaire.setDate(LocalDate.now());
+        beneficiaire.setDate(date);
         
         beneficiaire.setSession(session);
         beneficiaire.setNom(user.getName());

@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -84,7 +85,7 @@ public class TontineController {
     String mts;
 
     @PostMapping()
-    public ResponseEntity<?> createTontine(@RequestParam("user") Long id) { 
+    public ResponseEntity<?> createTontine(@RequestParam("user") Long id, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = true, value = "date" ) LocalDate date) {
         User user = userRepository.findById(id).get();  
         Tontine tontine = new Tontine();
         Retenue retenue = new Retenue();
@@ -121,11 +122,11 @@ public class TontineController {
         tontine.setCredit(0);
         tontine.setMotif("cotisation "+user.getName());
         tontine.setUser(user);
-        if (!planningRepository.existsByDate(LocalDate.now())){
+        if (!planningRepository.existsByDate(date)){
             return new ResponseEntity<>(new ResponseMessage("Erreur! -> Ce jour n'est pas inscrit dans le planning de réunion"),
               HttpStatus.BAD_REQUEST);
         }
-        tontine.setDate(LocalDate.now()); 
+        tontine.setDate(date);
         tontine.setSession(session);
 //        session.setReunion(reunion);
         System.out.println("session: "+ session.getDebut());
@@ -148,7 +149,7 @@ public class TontineController {
         }
         retenue.setDebit(mangwa);
         retenue.setCredit(0);
-        retenue.setDate(LocalDate.now());
+        retenue.setDate(date);
         retenue.setUser(user);
         retenue.setMotif("cotisation");
         
@@ -158,7 +159,7 @@ public class TontineController {
         
         Notifications notifications = new Notifications(
                 user.getName()+" a cotisé "+ e.getMontant()+" €",
-                LocalDate.now());
+                date);
         notificationsRepository.save(notifications);
         
       return new ResponseEntity<>(new ResponseMessage("Tontine enregistrée"), HttpStatus.CREATED);
