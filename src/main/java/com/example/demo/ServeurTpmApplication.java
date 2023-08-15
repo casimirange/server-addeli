@@ -13,15 +13,9 @@ public class ServeurTpmApplication extends SpringBootServletInitializer {
 		SpringApplication.run(ServeurTpmApplication.class, args);
 	}
 
-
 	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(ServeurTpmApplication.class);
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(ServeurTpmApplication .class);
 	}
-
-	/*@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(ServeurTpmApplication.class);
-	}*/
 
 }
