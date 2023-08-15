@@ -16,9 +16,11 @@
     <packaging>war</packaging>
     <properties>
         <java.version>1.8</java.version>
-        <!--		<start-class>com.example.demo.ServeurTpmApplication</start-class>-->
+        <start-class>com.example.demo.ServeurTpmApplication</start-class>
     </properties>
 
+
+    <url>/Dispatcher/*</url>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
