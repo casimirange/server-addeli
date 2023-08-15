@@ -12,16 +12,12 @@
 	<artifactId>ServeurADELI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ServeurADELI</name>
-
 	<packaging>war</packaging>
-
-	<!--<packaging>war</packaging>-->
-
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<start-class>com.example.demo.ServeurTpmApplication</start-class>
+<!--		<start-class>com.example.demo.ServeurTpmApplication</start-class>-->
 	</properties>
 
 	<dependencies>
@@ -36,11 +32,11 @@
                     <version>6.1.5.Final</version>
                 </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 		
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
