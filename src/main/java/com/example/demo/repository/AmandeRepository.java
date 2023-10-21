@@ -31,11 +31,11 @@ public interface AmandeRepository extends JpaRepository<Amande, Long> {
             + "u.name from amande a "
             + "join session s on a.id_session = s.id_session "
             + "join user u on u.id = a.id_user "
-            
+            + "where s.id_session = ?1 "
             + "ORDER by a.date desc limit 0,10 ";
   
     @Query(value=amande, nativeQuery = true)
-    public List<JSONObject> findAmande();
+    public List<JSONObject> findAmande(Long idSession);
     
     String amandeUser = "select a.id_amande, a.date, a.credit, a.debit, a.motif, a.solde, "
             + "u.name from amande a "

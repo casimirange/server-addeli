@@ -28,11 +28,11 @@ public interface DisciplineRepository extends JpaRepository<Discipline, Long> {
             + "u.name, u.id from discipline d "
             + "join session s on d.id_session = s.id_session "
             + "join user u on u.id = d.id_user "
-            + "where s.etat = 1 "
+            + "where s.id_session = ?1 \n"
             + "ORDER by d.date desc ";
   
     @Query(value=discipline, nativeQuery = true)
-    public List<JSONObject> findDiscipline();
+    public List<JSONObject> findDiscipline(Long idSession);
     
     String disciplineUSER = "select d.id_discipline, d.date, d.type, d.sanction, "
             + "u.name, u.id from discipline d "

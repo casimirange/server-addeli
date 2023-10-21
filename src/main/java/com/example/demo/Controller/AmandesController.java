@@ -18,6 +18,7 @@ import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.TontineRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -238,8 +239,23 @@ public class AmandesController {
 
 
     @GetMapping()
-    public List<JSONObject> getActiveSessionTontine(){
-        return amandeRepository.findAmande();
+    public List<JSONObject> getActiveSessionTontine(@RequestParam(required = false, value = "sessionId" ) String sessionId){
+        List<JSONObject> p ;
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = amandeRepository.findAmande(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = amandeRepository.findAmande(Long.parseLong(sessionId));
+        }
+
+        return p ;
     }
 
 

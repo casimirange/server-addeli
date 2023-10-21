@@ -31,7 +31,7 @@ public interface BeneficiaireRepository extends JpaRepository<Beneficiaire, Long
     String benefSession = "SELECT b.id_beneficiaire, b.date, b.montant, b.nom\n" +
         "from beneficiaire b\n" +
         "join session s on s.id_session = b.id_session \n" +
-        "where b.id_session = ?1 \n"+
+        "where s.id_session = ?1 \n"+
         "order by b.date desc";
   
     @Query(value=benefSession, nativeQuery = true)

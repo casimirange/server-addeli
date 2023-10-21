@@ -227,16 +227,22 @@ public class TontineController {
     }
 
     @GetMapping("/session")
-    public List<JSONObject> getActiveSessionTontine(){ 
-        List<Session> sess = sessionRepository.findByEtat(true);
+    public List<JSONObject> getActiveSessionTontine(@RequestParam(required = false, value = "sessionId" ) String sessionId){
         List<JSONObject> p ;
-        Session session = new Session();
-        if(!sess.isEmpty()){
-            session = sess.get(0); 
-            p = tontineRepository.TontineSession(session.getIdSession());
-        }else{
-            p = new ArrayList<>();
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = tontineRepository.TontineSession(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = tontineRepository.TontineSession(Long.parseLong(sessionId));
         }
+
         return p ;
     }
     

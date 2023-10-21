@@ -19,16 +19,13 @@ import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.TontineRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.*;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.RoleRepository;
 //import com.example.demo.repository.UtilisateurRepository;
 //import com.example.demo.security.jwt.JwtProvider;
 
 //import com.example.demo.util.RoleEnum;
-import java.util.List;
-import java.util.Map;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -155,8 +152,22 @@ public class PretsController {
     }
 
     @GetMapping
-    public List<JSONObject> getPrets(){      
-        return pretRepository.findPrets();
+    public List<JSONObject> getPrets(@RequestParam(required = false, value = "sessionId" ) String sessionId){
+        List<JSONObject> p ;
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = pretRepository.findPrets(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = pretRepository.findPrets(Long.parseLong(sessionId));
+        }
+        return p;
     }
 
     @GetMapping("/solde")

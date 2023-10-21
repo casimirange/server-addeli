@@ -150,16 +150,22 @@ public class BeneficiaireController {
 //    }
 
     @GetMapping
-    public List<JSONObject> getTontine(){     
-        List<Session> sess = sessionRepository.findByEtat(true);
+    public List<JSONObject> getAllBenef(@RequestParam(required = false, value = "sessionId" ) String sessionId){
         List<JSONObject> p ;
-        Session session = new Session();
-        if(!sess.isEmpty()){
-            session = sess.get(0); 
-            p = beneficiaireRepository.getAllBenefBySession(session.getIdSession());
-        }else{
-            p = new ArrayList<>();
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = beneficiaireRepository.getAllBenefBySession(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = beneficiaireRepository.getAllBenefBySession(Long.parseLong(sessionId));
         }
+
         return p ;
     }
     

@@ -28,9 +28,9 @@ public interface PlanningRepository extends JpaRepository<Planing, Long> {
     String planing = "select p.id_planning as id, p.date, p.evenement, u.name as membre, u.id as id_user from planing p "
             + "join session s on p.id_session = s.id_session "
             + "join user u on u.id = p.id_user "
-            + "where s.etat = 1"
+            + "where s.id_session = ?1"
             + " ORDER by p.date ASC ";
   
     @Query(value=planing, nativeQuery = true)
-    public List<JSONObject> findPlaning();
+    public List<JSONObject> findPlaning(Long idSession);
 }

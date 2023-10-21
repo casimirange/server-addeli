@@ -32,11 +32,11 @@ public interface PretRepository extends JpaRepository<Prets, Long> {
             + "p.rembourse, s.taux, u.name as nom from prets p "
             + "join session s on p.id_session = s.id_session "
             + "join user u on u.id = p.id_user "
-            + "where s.etat = 1"
+            + "where s.id_session = ?1"
             + " ORDER by p.date_pret desc ";
   
     @Query(value=planing, nativeQuery = true)
-    public List<JSONObject> findPrets();
+    public List<JSONObject> findPrets(Long idSession);
     
     String pretUser = "select p.id_pret as id, p.id_pret, p.date_pret, p.date_remboursement, p.montant_prete, p.montant_rembourse,"
             + "p.rembourse, s.taux, u.name as nom from prets p "

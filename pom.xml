@@ -20,7 +20,7 @@
     </properties>
 
 
-    <url>/Dispatcher/*</url>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

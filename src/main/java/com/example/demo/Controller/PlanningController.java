@@ -156,16 +156,23 @@ public class PlanningController {
     }
 
     @GetMapping
-    public List<JSONObject> getPlaning(){    
-        List<Session> sess = sessionRepository.findByEtat(true);
+    public List<JSONObject> getPlaning(@RequestParam(required = false, value = "sessionId" ) String sessionId){
         List<JSONObject> p ;
-        if(!sess.isEmpty()){
-            p = planningRepository.findPlaning();
-        }else{
-            p = new ArrayList<>();
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = planningRepository.findPlaning(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = planningRepository.findPlaning(Long.parseLong(sessionId));
         }
-        
-        return p;
+
+        return p ;
     }
 
     @GetMapping("/active")

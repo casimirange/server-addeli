@@ -21,6 +21,7 @@ import com.example.demo.repository.SessionRepository;
 import com.example.demo.repository.TontineRepository;
 import com.example.demo.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,8 +123,24 @@ public class DisciplineController {
     }
 
     @GetMapping()
-    public List<JSONObject> getActiveSessionTontine(){
-        return disciplineRepository.findDiscipline();
+    public List<JSONObject> getActiveSessionTontine(@RequestParam(required = false, value = "sessionId" ) String sessionId){
+        List<JSONObject> p ;
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = disciplineRepository.findDiscipline(session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = disciplineRepository.findDiscipline(Long.parseLong(sessionId));
+        }
+
+        return p ;
+//        return disciplineRepository.findDiscipline();
     }
              
     @GetMapping("/id/{id}")
