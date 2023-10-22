@@ -42,9 +42,9 @@ public interface PretRepository extends JpaRepository<Prets, Long> {
             + "p.rembourse, s.taux, u.name as nom from prets p "
             + "join session s on p.id_session = s.id_session "
             + "join user u on u.id = p.id_user "
-            + "where u.id = ?1"
+            + "where u.id = ?1 and s.id_session = ?2 "
             + " ORDER by p.date_pret desc ";
   
     @Query(value=pretUser, nativeQuery = true)
-    public List<JSONObject> findPretsUser(Long id);
+    public List<JSONObject> findPretsUser(Long id, Long sessionId);
 }

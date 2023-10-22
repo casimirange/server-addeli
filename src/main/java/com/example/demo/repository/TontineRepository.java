@@ -50,10 +50,11 @@ public interface TontineRepository extends JpaRepository<Tontine, Long> {
     String tontineUser = "SELECT t.date, t.motif, t.credit, t.debit, t.montant, u.id\n" +
         "from tontine t\n" +
         "join user u on (u.id = t.id_user) \n" +
-        "where u.id = ?1 \n"+
+        "join session s on s.id_session = t.id_session \n" +
+        "where u.id = ?1 and t.id_session = ?2  \n"+
         "order by t.id_tontine desc";
   
     @Query(value=tontineUser, nativeQuery = true)
-    public List<JSONObject> TontineUser(Long id);
+    public List<JSONObject> TontineUser(Long userId, Long sessionId);
 
 }

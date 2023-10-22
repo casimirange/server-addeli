@@ -249,10 +249,24 @@ public class TontineController {
     
            
     @GetMapping("/id/{id}")
-    public List<JSONObject> getUsers(@PathVariable Long id) {
-        User u = userRepository.findById(id).get();
+    public List<JSONObject> getUsers(@PathVariable Long id, @RequestParam(required = false, value = "sessionId" ) String sessionId) {
+//        User u = userRepository.findById(id).get();
+        List<JSONObject> p ;
+        if (sessionId.isEmpty()){
+            List<Session> sess = sessionRepository.findByEtat(true);
+
+            Session session = new Session();
+            if(!sess.isEmpty()){
+                session = sess.get(0);
+                p = tontineRepository.TontineUser(id, session.getIdSession());
+            }else{
+                p = new ArrayList<>();
+            }
+        }else {
+            p = tontineRepository.TontineUser(id, Long.parseLong(sessionId));
+        }
         
-        return tontineRepository.TontineUser(id);
+        return p;
     }
         
 }

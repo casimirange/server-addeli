@@ -37,9 +37,10 @@ public interface DisciplineRepository extends JpaRepository<Discipline, Long> {
     String disciplineUSER = "select d.id_discipline, d.date, d.type, d.sanction, "
             + "u.name, u.id from discipline d "
             + "join user u on u.id = d.id_user "
-            + "where u.id = ?1 "
+            + "join session s on d.id_session = s.id_session "
+            + "where u.id = ?1 and s.id_session = ?2 "
             + "ORDER by d.date desc ";
   
     @Query(value=disciplineUSER, nativeQuery = true)
-    public List<JSONObject> findDisciplineUser(Long id);
+    public List<JSONObject> findDisciplineUser(Long id, Long sessionId);
 }
